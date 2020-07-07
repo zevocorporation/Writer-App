@@ -4,11 +4,17 @@ services:
         build:
             dockerfile: Dockerfile.dev
             context: ./client/app
+        expose: 
+            - "19000"
+            - "19001"
+            - "19002"
         ports: 
+            - "3000:3000"
             - "19000:19000"
             - "19001:19001"
             - "19002:19002"
-        stdin_open: false
+            - "19006:19006"
+        stdin_open: true
         volumes: 
             - /app/node_modules
             - ./client/app:/app
