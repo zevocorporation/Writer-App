@@ -1,0 +1,24 @@
+{
+  "name": "hotel-app",
+  "version": "1.0.0",
+  "description": "A hotel mate app",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test",
+    "start": "npm run start",
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zevocorporation/hotel-mvp.git"
+  },
+  "author": "Zevo Corporation",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zevocorporation/hotel-mvp/issues"
+  },
+  "homepage": "https://github.com/zevocorporation/hotel-mvp#readme",
+  "dependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
