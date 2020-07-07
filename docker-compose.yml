@@ -8,18 +8,8 @@ services:
             - "19000:19000"
             - "19001:19001"
             - "19002:19002"
-        stdin_open: true
+        stdin_open: false
         volumes: 
             - /app/node_modules
             - ./client/app:/app
-    web:
-        build:
-            dockerfile: Dockerfile.dev
-            context: ./client/web
-        ports: 
-            - "3000:3000"
-        stdin_open: true
-        volumes: 
-            - /app/node_modules
-            - ./client/web:/app
              

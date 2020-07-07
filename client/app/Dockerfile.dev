@@ -3,12 +3,15 @@ FROM node:alpine
 
 WORKDIR '/app'
 
-COPY ./package.json .
+COPY ./package.json . 
 RUN npm install
+RUN apk add --no-cache bash git \
+  && npm install --global --unsafe-perm expo-cli@${EXPO_VERSION} \
+  && npm cache clean --force
 
 COPY . .
-
 CMD ["npm","run","start"]
+
 
 
 
