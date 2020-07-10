@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "hotel-app",
-    "slug": "hotel-app",
+    "name": "app",
+    "slug": "app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

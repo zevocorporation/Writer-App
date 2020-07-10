@@ -12,7 +12,7 @@ COPY . .
 
 
 
-CMD ["npm","run","web"]
+CMD ["npm","run","start"]
 
 
 
