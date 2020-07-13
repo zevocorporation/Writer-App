@@ -1,21 +1,51 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+
+import { Image,Touchable, Text, View } from 'react-native';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import HomeScreen from './screens/homeScreen'
+import CartScreen from './screens/cartScreen'
+
+import Button from './components/button'
+
+import Logo from './assets/favicon.png'
+
+const Stack = createStackNavigator();
+
+function LogoTitle() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Image
+      style={{ width: 50, height: 50 }}
+      source={Logo}
+    />
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen initialParams={{ name: 'demo' }} name="Home" component={HomeScreen} 
+        options={{
+          headerTitle:  props => <LogoTitle/>, 
+          
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerRight: props => <Button title="Login" />
+        }} />
+        <Stack.Screen name="Cart" component={CartScreen} />
+      </Stack.Navigator>
+      <StatusBar style="auto" />
+    </NavigationContainer>
+  );
+}
+
+
