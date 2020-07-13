@@ -1,23 +1,22 @@
 version: '3'
 services: 
-    app:
-        build:
-            dockerfile: Dockerfile.dev
-            context: ./client/app
-        expose: 
-            - "19000"
-            - "19001"
-            - "19002"
-        ports: 
-            - "3000:3000"
-            - "19000:19000"
-            - "19001:19001"
-            - "19002:19002"
-            - "19006:19006"
-        stdin_open: true
-        volumes: 
-            - /app/node_modules
-            - ./client/app:/app
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example
+        ports:
+          - 27017:27017
+    
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+          - 8081:8081
+        environment:
+          ME_CONFIG_MONGODB_ADMINUSERNAME: root
+          ME_CONFIG_MONGODB_ADMINPASSWORD: example
     server:
         build:
             dockerfile: Dockerfile.dev
