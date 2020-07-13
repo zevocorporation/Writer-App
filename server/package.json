@@ -1,7 +1,7 @@
 {
-  "name": "hotel-app",
+  "name": "writer-app",
   "version": "1.0.0",
-  "description": "A hotel mate app",
+  "description": "A virtual writing assistant",
   "main": "index.js",
   "scripts": {
     "test": "npm run test",
