@@ -1,4 +1,4 @@
-# hotel-mvp
+# writer-app
 
 
 DEV ENVIRONMENT
