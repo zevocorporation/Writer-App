@@ -1,0 +1,33 @@
+{
+  "name": "writer",
+  "version": "1.0.0",
+  "description": "Server ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zevocorporation/Writer-App.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zevocorporation/Writer-App/issues"
+  },
+  "homepage": "https://github.com/zevocorporation/Writer-App#readme",
+  "dependencies": {
+    "apollo-server": "^2.15.1",
+    "apollo-server-express": "^2.15.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.24"
+  },
+  "devDependencies": {
+    "graphql-tag": "^2.10.4",
+    "nodemon": "^2.0.4"
+  }
+}
