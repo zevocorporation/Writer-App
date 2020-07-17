@@ -1,16 +1,16 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
-// const typeDefs = require('./graphql/schema/index');
-// const resolvers = require('./graphql/resolvers/index');
+const typeDefs = require('./graphql/schema/index');
+const resolvers = require('./graphql/resolvers/index');
 require('dotenv').config();
 
 const app = express();
-// const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers });
 
 app.use(express.urlencoded());
 
-// server.applyMiddleware({ app });
+server.applyMiddleware({ app });
 
 mongoose
   .connect(

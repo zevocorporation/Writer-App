@@ -1,15 +1,26 @@
 const { GraphQLScalarType } = require('graphql');
 
-const resolvers = {
-  Query: {},
+const abstract = require('./abstract');
 
-  Mutation: {},
+const resolvers = {
+  Query: {
+    ...abstract.queryResolver,
+  },
+
+  Mutation: {
+    ...abstract.mutationResolver,
+  },
 
   DateTime: new GraphQLScalarType({
     name: 'DateTime',
     description: 'Custom date scalar',
     serialize(value) {
-      return value.toDateString();
+      return (
+        value.toLocaleString([], {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        }) + ' IST'
+      );
     },
   }),
 };
