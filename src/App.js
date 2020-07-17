@@ -1,10 +1,11 @@
 import React from 'react';
-import Button from './components/button'
+import  Input from './components/input'
 
 function App() {
   return (
     <div>
       <p>App</p>
+      <Input type='h' />
     </div>
   );
 }
