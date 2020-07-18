@@ -28,7 +28,9 @@ const typeDefs = gql`
 
   input UserInput {
     mobile: String!
+    otp: String!
     password: String!
+    confirmPassword: String!
   }
 
   input SendCodeInput {
@@ -70,7 +72,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(userInput: UserInput): User
+    signUp(userInput: UserInput): User
+    resetPassword(userInput: UserInput): User
     createAbstract(abstractInput: AbstractInput): Abstract
     editAbstract(editAbstractInput: EditAbstractInput): Abstract
     deleteAbstract(abstractId: String!): Abstract

@@ -11,6 +11,7 @@ const resolvers = {
 
   Mutation: {
     ...abstract.mutationResolver,
+    ...user.mutationResolver,
   },
 
   DateTime: new GraphQLScalarType({

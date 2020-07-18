@@ -18,6 +18,7 @@ exports.queryResolver = {
       ) {
         throw new Error('Mobile number does not exists');
       }
+      var request = require('request');
       const otp = await Math.floor(1000 + Math.random() * 9000);
       const options = {
         method: 'GET',
@@ -35,13 +36,15 @@ exports.queryResolver = {
         },
       };
       console.log(otp);
-      req.session.otp = otp;
-      req.session.mobile = args.sendCodeInput.mobile;
       request(options, (error, response, body) => {
         if (error) throw new Error(error);
         console.log(body);
         return true;
       });
+      console.log(req);
+      req.session.otp = otp;
+      req.session.mobile = args.sendCodeInput.mobile;
+
       return false;
     } catch (err) {
       throw err;
@@ -49,4 +52,53 @@ exports.queryResolver = {
   },
 };
 
-exports.mutationResolver = {};
+exports.mutationResolver = {
+  signUp: async (_, args, { req }) => {
+    try {
+      const otp = args.userInput.otp;
+      otp.trim();
+      if (otp.length !== 4 && otp === ' ') {
+        throw new error('Otp is invalid');
+      }
+      if (otp !== req.session.otp) {
+        throw new error('Otp mismatch');
+      }
+      if (args.userInput.password !== args.userInput.confirmPassword) {
+        throw new error('Password and confirm Password does not match');
+      }
+      const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
+      const user = new User({
+        mobile: req.session.mobile.trim(),
+        password: hashedPassword.trim(),
+      });
+      const result = await user.save();
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  },
+  resetPassword: async (_, args, { req }) => {
+    try {
+      const existingUser = await User.findOne({
+        mobile: req.session.mobile,
+      });
+      const otp = args.userInput.otp;
+      otp.trim();
+      if (otp.length != 4 && otp == ' ') {
+        throw new error('Otp is invalid');
+      }
+      if (otp != req.session.otp) {
+        throw new error('Otp mismatch');
+      }
+      if (args.userInput.password != args.userInput.confirmPassword) {
+        throw new error('Password and confirm Password does not match');
+      }
+      const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
+      existingUser.password = hashedPassword;
+      await existingUser.save();
+      return existingUser;
+    } catch (err) {
+      throw err;
+    }
+  },
+};
