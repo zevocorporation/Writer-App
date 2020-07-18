@@ -14,7 +14,6 @@ const mongoose = require('mongoose');
 
 //To drop database from test
 const Abstract = require('../models/abstract');
-const User = require('../models/user');
 
 require('dotenv').config();
 //Max of 30secs to run all tests
@@ -25,20 +24,19 @@ const server = new ApolloServer({ typeDefs, resolvers });
 //Test database connection
 //P.S Do not commit to gitlab with USERNAME and PASSWORD!
 mongoose.connect(
-  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-jy47h.mongodb.net/writer-app?retryWrites=true&w=majority`,
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-jy47h.mongodb.net/plansTest?retryWrites=true&w=majority`,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
 //Test graphql queries for  ABSTRACT
 
 const GET_ABSTRACT = gql`
-query  getUsersAbstract(userId: String!){
-  getUsersAbstract(userId:$userId){
-    subject
-    title
-   
+  query getUsersAbstract($userId: String!) {
+    getUsersAbstract(userId: $userId) {
+      subject
+      title
+    }
   }
-}
 `;
 
 const CREATE_ABSTRACT = gql`
@@ -59,8 +57,17 @@ describe('Abstract resolvers', () => {
       mutation: CREATE_ABSTRACT,
       variables: {
         abstractInput: {
+          userId: '5ef612a14d99e51764d1782b',
           subject: 'TESTING THE ABSTRACT',
           title: 'ABSTRACT CREATED IN TEST',
+          significance: 'significance',
+          description: 'description',
+          knowledgeGap: 'knowledgeGap',
+          researchQuestion: 'researchQuestion',
+          hypothesis: 'hypothesis',
+          majorTrends: 'majorTrends',
+          conclusion: 'conclusion',
+          abstract: 'abstract',
         },
       },
     });
@@ -76,10 +83,15 @@ describe('Abstract resolvers', () => {
     const res = await query({
       query: GET_ABSTRACT,
       variables: {
-        userId: '',
+        userId: '5ef612a14d99e51764d1782b',
       },
     });
-    expect(res.data.getAbstract).toEqual([]);
+    expect(res.data.getUsersAbstract).toEqual([
+      {
+        subject: 'TESTING THE ABSTRACT',
+        title: 'ABSTRACT CREATED IN TEST',
+      },
+    ]);
     await Abstract.deleteOne({ title: 'ABSTRACT CREATED IN TEST' });
   });
 });
