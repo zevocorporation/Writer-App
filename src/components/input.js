@@ -14,7 +14,7 @@ function Input(props) {
     
     return (
            <div>
-                {(props.type=='text')? renderTextInput : renderMobileInput}
+                {(props.type=='text') ? renderTextInput : renderMobileInput}
            </div>
     )
 }
