@@ -70,7 +70,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(userInput: UserInput): Users
+    createUser(userInput: UserInput): User
     createAbstract(abstractInput: AbstractInput): Abstract
     editAbstract(editAbstractInput: EditAbstractInput): Abstract
     deleteAbstract(abstractId: String!): Abstract
