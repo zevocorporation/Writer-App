@@ -26,7 +26,8 @@
     "express": "^4.17.1",
     "graphql": "^15.3.0",
     "mongodb": "^3.5.9",
-    "mongoose": "^5.9.24"
+    "mongoose": "^5.9.24",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "graphql-tag": "^2.10.4",

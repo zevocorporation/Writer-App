@@ -31,6 +31,11 @@ const typeDefs = gql`
     password: String!
   }
 
+  input SendCodeInput {
+    pageType: String!
+    mobile: String!
+  }
+
   input AbstractInput {
     userId: String!
     subject: String!
@@ -59,6 +64,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    sendCode(sendCodeInput: SendCodeInput): Boolean!
     getUsersParticularAbstract(abstractId: String!): Abstract!
     getUsersAbstract(userId: String!): [Abstract!]!
   }

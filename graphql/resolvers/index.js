@@ -1,10 +1,12 @@
 const { GraphQLScalarType } = require('graphql');
 
 const abstract = require('./abstract');
+const user = require('./user');
 
 const resolvers = {
   Query: {
     ...abstract.queryResolver,
+    ...user.queryResolver,
   },
 
   Mutation: {

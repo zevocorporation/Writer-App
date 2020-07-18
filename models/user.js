@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const { buildSchema } = require('graphql');
 
 const userSchema = new Schema(
   {
@@ -16,4 +15,4 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model('Users', userSchema);
+module.exports = model('User', userSchema);
