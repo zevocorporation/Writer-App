@@ -3,6 +3,12 @@ const { gql } = require('apollo-server');
 const typeDefs = gql`
   scalar DateTime
 
+  type User {
+    _id: ID!
+    mobile: String!
+    password: String!
+  }
+
   type Abstract {
     _id: ID!
     userId: String!
@@ -18,6 +24,11 @@ const typeDefs = gql`
     abstract: String!
     createdAt: DateTime!
     updatedAt: DateTime!
+  }
+
+  input UserInput {
+    mobile: String!
+    password: String!
   }
 
   input AbstractInput {
@@ -53,6 +64,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    createUser(userInput: UserInput): Users
     createAbstract(abstractInput: AbstractInput): Abstract
     editAbstract(editAbstractInput: EditAbstractInput): Abstract
     deleteAbstract(abstractId: String!): Abstract

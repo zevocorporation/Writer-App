@@ -21,6 +21,7 @@
     "apollo-server": "^2.15.1",
     "apollo-server-express": "^2.15.1",
     "apollo-server-testing": "^2.16.0",
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
