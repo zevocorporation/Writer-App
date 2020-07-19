@@ -8,7 +8,7 @@ function login() {
         
         <Input type='number' />
         <Input type='password' />
-        <Button type='login' />
+        <Button value='login' />
         
       </div>
     );

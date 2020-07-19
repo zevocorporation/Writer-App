@@ -8,9 +8,9 @@ function Input(props) {
     
     return (
            <div>
-                {(props.type==='text') && renderTextInput}
-                {(props.type==='number') && renderMobileInput }
-                {(props.type==='password') && renderPasswordInput}
+                {(props.type=='text') && renderTextInput}
+                {(props.type=='number') && renderMobileInput }
+                {(props.type=='password') && renderPasswordInput}
            </div>
     )
 }

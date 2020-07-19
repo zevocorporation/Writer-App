@@ -1,11 +1,18 @@
 import React from 'react';
 
-function Button(props) {
-  const renderButton=<button value={this.props}></button>
-  return(
-    <div>
-      {renderButton}
-    </div>
-  )
+function Button(props){
+const renderbutton=<button>{props.value}</button>
+
+    return(
+      <div>
+        {renderbutton}
+      </div>
+
+    )
+
 }
+
+
+
+
 export default Button;
