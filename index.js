@@ -2,14 +2,38 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const typeDefs = require('./graphql/schema/index');
+const cors = require('cors');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const resolvers = require('./graphql/resolvers/index');
 require('dotenv').config();
 
 const app = express();
-const server = new ApolloServer({ typeDefs, resolvers });
+app.use(cors());
 
-app.use(express.urlencoded());
+const SES_EXP = +process.env.SESSION_EXPIRY;
 
+const store = new MongoDBStore({
+  uri: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-jy47h.mongodb.net/${process.env.MONGO_DB}`,
+  collection: process.env.SESSION_DB,
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: SES_EXP },
+    store: store,
+  })
+);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: (integrationContext) => ({
+    req: integrationContext.req,
+  }),
+});
 server.applyMiddleware({ app });
 
 mongoose
