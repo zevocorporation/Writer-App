@@ -1,10 +1,47 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const request = require('request');
 require('dotenv').config();
 
 const User = require('../../models/user');
 
 exports.queryResolver = {
+  login: async (_, args, { req }) => {
+    try {
+      const usernum = await User.findOne({ mobile: args.mobile });
+      const user = await User.findById(args.id);
+      if (!usernum) {
+        throw new Error('mobile num not exists!');
+      }
+
+      if (user) {
+        const isEqual = await bcrypt.compare(args.password, user.password);
+
+        if (!isEqual) {
+          throw new Error('invalid password!');
+        }
+      }
+
+      console.log(args.mobile);
+
+      const token = jwt.sign(
+        { mobile: args.mobile },
+        'fjdfhkry8i46328yasjfhwi7r8q3ryifh',
+        { expiresIn: '1h' }
+      );
+
+      return {
+        userId: args.userInput.userId,
+        mobile: args.mobile,
+        token: token,
+        tokenExpiration: 1,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+
   sendCode: async (_, args, { req }) => {
     try {
       const numberExists = await User.findOne({
