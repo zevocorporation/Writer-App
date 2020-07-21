@@ -5,7 +5,6 @@ const typeDefs = gql`
 
   type User {
     _id: ID!
-    userId: String!
     mobile: String!
     password: String!
   }
@@ -29,14 +28,13 @@ const typeDefs = gql`
 
   type AuthData {
     _id: ID!
-    userId: String!
+
     mobile: String!
     token: String!
     tokenExpiration: Int!
   }
 
   input UserInput {
-    _id: ID!
     userId: String!
     mobile: String!
     otp: String!
