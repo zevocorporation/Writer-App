@@ -41,11 +41,12 @@ function Hero(props) {
           research assistant
         </Title>
         <Text type='textLight' color={Colors.accent.secondary}>
-          Writer assists you through every stage of your research writing
-          process
+          Writer assists you through every stage of your
+          <br />
+          research writing process
         </Text>
         <Button
-          style={{ width: '120px' }}
+          style={{ width: '120px', marginTop: '60px' }}
           color={Colors.tertiary}
           name='Signup Now'
         />

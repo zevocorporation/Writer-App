@@ -7,11 +7,12 @@ function Input(props) {
       padding: '16px',
       backgroundColor: Colors.primaryLight,
       border: 'none',
-      borderRadius: '5px',
+      borderRadius: '8px',
       fontFamily: 'Quicksand',
       marginTop: '16px',
       marginBottom: '16px',
       minWidth: '280px',
+      fontSize: '14px',
     },
   }
   const renderInput = (

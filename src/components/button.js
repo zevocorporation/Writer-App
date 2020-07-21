@@ -8,7 +8,7 @@ function Button(props) {
       backgroundColor: props.color ? props.color : Colors.secondary,
       color: Colors.accent.secondary,
       border: 'none',
-      borderRadius: '5px',
+      borderRadius: '8px',
       fontFamily: 'Quicksand',
       fontSize: '16px',
       marginTop: '16px',

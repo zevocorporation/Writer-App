@@ -5,39 +5,39 @@ export default function Typography(props, category) {
     textDefault: {
       color: props.color ? props.color : Colors.accent.primary,
       fontSize: '22px',
-      margin: '5px',
+      margin: '0px',
     },
     textLight: {
       color: props.color ? props.color : Colors.accent.primary,
       fontSize: '22px',
-      margin: '5px',
+      margin: '0px',
       fontWeight: '100',
     },
     textBold: {
       color: props.color ? props.color : Colors.accent.primary,
       fontSize: '22px',
-      margin: '5px',
+      margin: '0px',
       fontWeight: '600',
     },
     titleDefault: {
       color: props.color ? props.color : Colors.accent.primary,
       fontSize: '32px',
-      margin: '5px',
+      margin: '0px',
     },
     titleLarge: {
       color: props.color ? props.color : Colors.accent.tertiary,
       fontSize: '58px',
-      margin: '5px',
+      margin: '0px',
     },
     label: {
       color: props.color ? props.color : Colors.accent.label,
       fontSize: '22px',
-      margin: '5px',
+      margin: '0px',
     },
     quote: {
       color: props.color ? props.color : Colors.accent.primary,
       fontSize: '22px',
-      margin: '5px',
+      margin: '0px',
     },
     link: {
       color: props.color ? props.color : Colors.accent.primary,

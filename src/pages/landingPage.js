@@ -1,11 +1,13 @@
 import React from 'react'
 
 import Hero from '../components/hero'
+import Statistics from '../components/statistics'
 
 function LandingPage(props) {
   return (
-    <div style={{ display: 'flex', maxWidth: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
       <Hero />
+      <Statistics />
     </div>
   )
 }
