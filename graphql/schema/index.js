@@ -5,6 +5,7 @@ const typeDefs = gql`
 
   type User {
     _id: ID!
+    userId: String!
     mobile: String!
     password: String!
   }
@@ -26,7 +27,17 @@ const typeDefs = gql`
     updatedAt: DateTime!
   }
 
+  type AuthData {
+    _id: ID!
+    userId: String!
+    mobile: String!
+    token: String!
+    tokenExpiration: Int!
+  }
+
   input UserInput {
+    _id: ID!
+    userId: String!
     mobile: String!
     otp: String!
     password: String!
@@ -66,6 +77,8 @@ const typeDefs = gql`
   }
 
   type Query {
+    login(mobile: String!, password: String!): AuthData!
+
     sendCode(sendCodeInput: SendCodeInput): Boolean!
     getUsersParticularAbstract(abstractId: String!): Abstract!
     getUsersAbstract(userId: String!): [Abstract!]!
