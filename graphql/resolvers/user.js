@@ -18,7 +18,7 @@ exports.queryResolver = {
       ) {
         throw new Error('Mobile number does not exists');
       }
-      var request = require('request');
+      let otpSent = false;
       const otp = await Math.floor(1000 + Math.random() * 9000);
       const options = {
         method: 'GET',
@@ -36,15 +36,23 @@ exports.queryResolver = {
         },
       };
       console.log(otp);
-      request(options, (error, response, body) => {
-        if (error) throw new Error(error);
-        console.log(body);
-        return true;
-      });
-      console.log(req);
       req.session.otp = otp;
       req.session.mobile = args.sendCodeInput.mobile;
-
+      let sendOtp = new Promise((resolve, reject) => {
+        request(options, (error, response, body) => {
+          if (error) reject(error);
+          resolve('Body:' + body);
+        });
+      });
+      await sendOtp
+        .then((result) => {
+          console.log(result);
+          otpSent = true;
+        })
+        .catch((err) => {
+          throw err;
+        });
+      if (otpSent) return true;
       return false;
     } catch (err) {
       throw err;
@@ -53,50 +61,35 @@ exports.queryResolver = {
 };
 
 exports.mutationResolver = {
-  signUp: async (_, args, { req }) => {
+  signUpAndResetPassword: async (_, args, { req }) => {
     try {
       const otp = args.userInput.otp;
       otp.trim();
-      if (otp.length !== 4 && otp === ' ') {
-        throw new error('Otp is invalid');
-      }
-      if (otp !== req.session.otp) {
-        throw new error('Otp mismatch');
-      }
-      if (args.userInput.password !== args.userInput.confirmPassword) {
-        throw new error('Password and confirm Password does not match');
-      }
-      const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      const user = new User({
-        mobile: req.session.mobile.trim(),
-        password: hashedPassword.trim(),
-      });
-      const result = await user.save();
-      return result;
-    } catch (err) {
-      throw err;
-    }
-  },
-  resetPassword: async (_, args, { req }) => {
-    try {
-      const existingUser = await User.findOne({
-        mobile: req.session.mobile,
-      });
-      const otp = args.userInput.otp;
-      otp.trim();
-      if (otp.length != 4 && otp == ' ') {
-        throw new error('Otp is invalid');
+      if (otp.length != 4) {
+        throw new Error('Otp is invalid');
       }
       if (otp != req.session.otp) {
-        throw new error('Otp mismatch');
+        throw new Error('Otp mismatch');
       }
-      if (args.userInput.password != args.userInput.confirmPassword) {
-        throw new error('Password and confirm Password does not match');
+      if (args.userInput.password !== args.userInput.confirmPassword) {
+        throw new Error('Password and confirm Password does not match');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      existingUser.password = hashedPassword;
-      await existingUser.save();
-      return existingUser;
+      if (args.userInput.pageType == 'SIGNUP') {
+        const user = new User({
+          mobile: req.session.mobile.trim(),
+          password: hashedPassword.trim(),
+        });
+        const result = await user.save();
+        return result;
+      } else if (args.userInput.pageType == 'RESETPASSWORD') {
+        const existingUser = await User.findOne({
+          mobile: req.session.mobile,
+        });
+        existingUser.password = hashedPassword;
+        await existingUser.save();
+        return existingUser;
+      }
     } catch (err) {
       throw err;
     }

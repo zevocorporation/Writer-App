@@ -1,10 +1,11 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
-const typeDefs = require('./graphql/schema/index');
 const cors = require('cors');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+
+const typeDefs = require('./graphql/schema/index');
 const resolvers = require('./graphql/resolvers/index');
 require('dotenv').config();
 
@@ -15,7 +16,7 @@ const SES_EXP = +process.env.SESSION_EXPIRY;
 
 const store = new MongoDBStore({
   uri: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-jy47h.mongodb.net/${process.env.MONGO_DB}`,
-  collection: process.env.SESSION_DB,
+  collection: process.env.SESSION_TABLE,
 });
 
 app.use(
@@ -27,6 +28,7 @@ app.use(
     store: store,
   })
 );
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -38,7 +40,7 @@ server.applyMiddleware({ app });
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-jy47h.mongodb.net/writer-app?retryWrites=true&w=majority`,
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-jy47h.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {

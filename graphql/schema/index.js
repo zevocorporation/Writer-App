@@ -7,6 +7,8 @@ const typeDefs = gql`
     _id: ID!
     mobile: String!
     password: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   type Abstract {
@@ -27,6 +29,7 @@ const typeDefs = gql`
   }
 
   input UserInput {
+    pageType: String!
     mobile: String!
     otp: String!
     password: String!
@@ -72,8 +75,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    signUp(userInput: UserInput): User
-    resetPassword(userInput: UserInput): User
+    signUpAndResetPassword(userInput: UserInput): User
     createAbstract(abstractInput: AbstractInput): Abstract
     editAbstract(editAbstractInput: EditAbstractInput): Abstract
     deleteAbstract(abstractId: String!): Abstract
