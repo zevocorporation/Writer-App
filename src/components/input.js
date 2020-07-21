@@ -1,21 +1,21 @@
 import React from 'react'
 
 function Input(props) {
+  const renderMobileInput = (
+    <input type='number' placeholder='mobile' value={props.value} />
+  )
+  const renderTextInput = (
+    <input type='text' placeholder='' value={props.value} />
+  )
+  const renderPasswordInput = (
+    <input type='password' placeholder='password' value={props.value} />
+  )
+
   return (
     <div>
-      <input placeholder='mobile' type='number' value={props.Input} />
-      <button>send OTP</button>
-      <br></br>
-      <input placeholder='verification code' type='text' value={props.Input} />
-      <br></br>
-      <input placeholder='New Password ' type='text' value={props.Input} />
-      <br></br>
-      <input placeholder='Confirm password' type='text' value={props.Input} />
-      <br></br>
-      <button>signup</button>
-      <p>
-        Already have a account?<a href=''>Log In</a>
-      </p>
+      {props.type == 'text' && renderTextInput}
+      {props.type == 'number' && renderMobileInput}
+      {props.type == 'password' && renderPasswordInput}
     </div>
   )
 }
