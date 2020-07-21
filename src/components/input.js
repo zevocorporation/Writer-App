@@ -1,21 +1,33 @@
 import React from 'react'
 
+import Colors from '../styles/colors'
 function Input(props) {
-  const renderMobileInput = (
-    <input type='number' placeholder='mobile' value={props.value} />
-  )
-  const renderTextInput = (
-    <input type='text' placeholder='' value={props.value} />
-  )
-  const renderPasswordInput = (
-    <input type='password' placeholder='password' value={props.value} />
+  const styles = {
+    input: {
+      padding: '16px',
+      backgroundColor: Colors.primaryLight,
+      border: 'none',
+      borderRadius: '5px',
+      fontFamily: 'Quicksand',
+      marginTop: '16px',
+      marginBottom: '16px',
+      minWidth: '280px',
+    },
+  }
+  const renderInput = (
+    <input
+      style={styles.input}
+      type='text'
+      placeholder={props.placeholder}
+      value={props.value}
+    />
   )
 
   return (
     <div>
-      {props.type == 'text' && renderTextInput}
-      {props.type == 'number' && renderMobileInput}
-      {props.type == 'password' && renderPasswordInput}
+      {props.type == 'text' && renderInput}
+      {props.type == 'number' && renderInput}
+      {props.type == 'password' && renderInput}
     </div>
   )
 }

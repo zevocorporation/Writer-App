@@ -3,52 +3,55 @@ import Colors from './colors'
 export default function Typography(props, category) {
   const styles = {
     textDefault: {
-      fontFamily: 'default',
       color: props.color ? props.color : Colors.accent.primary,
-      fontSize: 14,
-      lineHeight: 18,
+      fontSize: '22px',
+      margin: '5px',
     },
     textLight: {
-      fontFamily: 'light',
       color: props.color ? props.color : Colors.accent.primary,
-      fontSize: 14,
-      lineHeight: 18,
+      fontSize: '22px',
+      margin: '5px',
+      fontWeight: '100',
     },
     textBold: {
-      fontFamily: 'bold',
       color: props.color ? props.color : Colors.accent.primary,
-      fontSize: 14,
-      lineHeight: 25,
+      fontSize: '22px',
+      margin: '5px',
+      fontWeight: '600',
     },
     titleDefault: {
-      fontFamily: 'bold',
       color: props.color ? props.color : Colors.accent.primary,
-      fontSize: 22,
-      lineHeight: 25,
+      fontSize: '32px',
+      margin: '5px',
     },
     titleLarge: {
-      fontFamily: 'bold',
       color: props.color ? props.color : Colors.accent.tertiary,
-      fontSize: 22,
-      lineHeight: 25,
+      fontSize: '58px',
+      margin: '5px',
     },
     label: {
-      fontFamily: 'default',
       color: props.color ? props.color : Colors.accent.label,
-      fontSize: 22,
-      lineHeight: 18,
+      fontSize: '22px',
+      margin: '5px',
     },
     quote: {
-      fontFamily: 'default',
       color: props.color ? props.color : Colors.accent.primary,
-      fontSize: 18,
+      fontSize: '22px',
+      margin: '5px',
+    },
+    link: {
+      color: props.color ? props.color : Colors.accent.primary,
+      fontSize: '14px',
+      margin: '5px',
+      ...props.style,
     },
   }
 
   const selectText =
     (!props.type && styles.textDefault) ||
     (props.type === 'textLight' && styles.textLight) ||
-    (props.type === 'textBold' && styles.textBold)
+    (props.type === 'textBold' && styles.textBold) ||
+    (props.type === 'link' && styles.link)
 
   const selectTitle =
     (!props.type && styles.titleDefault) ||
