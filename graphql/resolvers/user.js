@@ -55,7 +55,7 @@ exports.queryResolver = {
           auth: process.env.DATAGEN_AUTHKEY,
           senderid: process.env.DATAGEN_SENDERID,
           msisdn: args.sendCodeInput.mobile,
-          message: `Your one time password is ${otp}.this otp will expire in 30 minutes `,
+          message: `Your one time password is ${otp}. This otp will expire in 30 minutes.`,
         },
         strictSSL: false,
         rejectUnauthorized: false,
