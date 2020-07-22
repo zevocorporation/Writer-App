@@ -50,6 +50,7 @@ export default function Typography(props, category) {
       color: props.color ? props.color : Colors.accent.primary,
       fontSize: '2.5vh',
       margin: '5px',
+      cursor: 'pointer',
       ...props.style,
     },
   }

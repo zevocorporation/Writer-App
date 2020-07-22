@@ -1,8 +1,7 @@
 import React, { useState, useEffect, createContext } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './patterns/navbar'
 import LandingPage from './pages/landingPage'
-import SignupPage from './pages/signupPage'
-import ResetPage from './pages/Resetpage'
 
 import DetectDevice from './helpers/detectDevice'
 
@@ -19,10 +18,23 @@ function App() {
 
   return (
     <DeviceContext.Provider value={device}>
-      <Navbar />
-      <LandingPage />
-      <ResetPage />
-      <SignupPage />
+      <Router>
+        <Navbar />
+        <Switch>
+          <Route exact path='/'>
+            <LandingPage formType='login' />
+          </Route>
+          <Route path='/login'>
+            <LandingPage formType='login' />
+          </Route>
+          <Route path='/signup'>
+            <LandingPage formType='signup' />
+          </Route>
+          <Route path='/reset-password'>
+            <LandingPage formType='reset-password' />
+          </Route>
+        </Switch>
+      </Router>
     </DeviceContext.Provider>
   )
 }

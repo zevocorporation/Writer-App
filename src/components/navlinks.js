@@ -1,8 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import Colors from '../styles/colors'
-
-import Text from '../components/text'
 
 function Navlinks(props) {
   const styles = {
@@ -16,12 +15,13 @@ function Navlinks(props) {
     navlink: {
       color: Colors.accent.secondary,
       margin: '0px 25px',
+      textDecoration: 'none',
     },
   }
   const renderNavlink = props.navlinks.map((navlink) => (
-    <Text type='link' style={styles.navlink} key={navlink.id}>
+    <Link type='link' to={navlink.to} style={styles.navlink} key={navlink.id}>
       {navlink.name}
-    </Text>
+    </Link>
   ))
   return <div style={styles.navlinks}>{renderNavlink}</div>
 }

@@ -26,10 +26,12 @@ function Navbar() {
     {
       id: 1,
       name: 'Login',
+      to: '/login',
     },
     {
       id: 2,
       name: 'Signup',
+      to: '/signup',
     },
   ]
   return (

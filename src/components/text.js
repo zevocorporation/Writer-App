@@ -4,11 +4,14 @@ import Typography from '../styles/typography'
 function Text(props) {
   const category = 'text'
   const style = props.style
-  return (
+
+  const renderText = (
     <p onClick={props.onClick} style={Typography(props, category, style)}>
       {props.children}
     </p>
   )
+
+  return renderText
 }
 
 export default Text

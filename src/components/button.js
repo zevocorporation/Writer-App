@@ -20,7 +20,11 @@ function Button(props) {
       ...props.style,
     },
   }
-  const renderbutton = <button style={styles.button}>{props.name}</button>
+  const renderbutton = (
+    <button onClick={props.onClick} style={styles.button}>
+      {props.name}
+    </button>
+  )
 
   return renderbutton
 }
