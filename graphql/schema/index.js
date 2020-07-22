@@ -29,8 +29,7 @@ const typeDefs = gql`
   }
 
   type AuthData {
-    _id: ID!
-
+    userId: ID!
     mobile: String!
     token: String!
     tokenExpiration: Int!
@@ -50,7 +49,6 @@ const typeDefs = gql`
   }
 
   input AbstractInput {
-    userId: String!
     subject: String!
     title: String!
     significance: String!
@@ -78,10 +76,9 @@ const typeDefs = gql`
 
   type Query {
     login(mobile: String!, password: String!): AuthData!
-
     sendCode(sendCodeInput: SendCodeInput): Boolean!
     getUsersParticularAbstract(abstractId: String!): Abstract!
-    getUsersAbstract(userId: String!): [Abstract!]!
+    getUsersAbstract: [Abstract!]!
   }
 
   type Mutation {

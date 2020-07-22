@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 module.exports = (req, res, next) => {
   const authHeader = req.get('Authorization');
   if (!authHeader) {
@@ -16,8 +17,7 @@ module.exports = (req, res, next) => {
     decodedToken = jwt.verify(token, process.env.SECRET_SUPER_KEY);
   } catch (err) {
     req.isAuth = false;
-    throw new Error('Invalid token');
-    // return next();
+    return next();
   }
   if (!decodedToken) {
     req.isAuth = false;

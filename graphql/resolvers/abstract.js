@@ -1,8 +1,9 @@
 const Abstract = require('../../models/abstract');
 
 exports.queryResolver = {
-  getUsersParticularAbstract: async (_, args) => {
+  getUsersParticularAbstract: async (_, args, { req }) => {
     try {
+      if (!req.isAuth) throw new Error('Unauthenticated');
       const particularAbstract = await Abstract.findById(args.abstractId);
       if (!particularAbstract) {
         throw new Error('Abstract Not Found!');
@@ -13,9 +14,10 @@ exports.queryResolver = {
     }
   },
 
-  getUsersAbstract: async (_, args) => {
+  getUsersAbstract: async (_, args, { req }) => {
     try {
-      const allAbstract = await Abstract.find({ userId: args.userId });
+      if (!req.isAuth) throw new Error('Unauthenticated');
+      const allAbstract = await Abstract.find({ userId: req.userId });
       if (allAbstract[0]) {
         return allAbstract;
       }
@@ -27,10 +29,10 @@ exports.queryResolver = {
 };
 
 exports.mutationResolver = {
-  createAbstract: async (_, args) => {
+  createAbstract: async (_, args, { req }) => {
     try {
       const newAbstract = new Abstract({
-        userId: args.abstractInput.userId,
+        userId: req.userId,
         subject: args.abstractInput.subject,
         title: args.abstractInput.title,
         significance: args.abstractInput.significance,
@@ -48,8 +50,9 @@ exports.mutationResolver = {
       throw err;
     }
   },
-  editAbstract: async (_, args) => {
+  editAbstract: async (_, args, { req }) => {
     try {
+      if (!req.isAuth) throw new Error('Unauthenticated');
       const getAbstract = await Abstract.findById(args.editAbstractInput._id);
       if (!getAbstract) {
         throw new Error('Abstract Not Found!');
@@ -70,8 +73,9 @@ exports.mutationResolver = {
       throw err;
     }
   },
-  deleteAbstract: async (_, args) => {
+  deleteAbstract: async (_, args, { req }) => {
     try {
+      if (!req.isAuth) throw new Error('Unauthenticated');
       const abstractToDelete = await Abstract.findByIdAndDelete(
         args.abstractId
       );

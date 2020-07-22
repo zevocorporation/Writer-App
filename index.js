@@ -7,10 +7,13 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 const typeDefs = require('./graphql/schema/index');
 const resolvers = require('./graphql/resolvers/index');
+const isAuth = require('./middleware/is-auth');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
+
+app.use(isAuth);
 
 const SES_EXP = +process.env.SESSION_EXPIRY;
 

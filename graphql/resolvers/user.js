@@ -7,35 +7,26 @@ require('dotenv').config();
 const User = require('../../models/user');
 
 exports.queryResolver = {
-  login: async (_, args, { req }) => {
+  login: async (_, args) => {
     try {
-      const usernum = await User.findOne({ mobile: args.mobile });
-      const user = await User.findById(args.id);
-      if (!usernum) {
-        throw new Error('mobile num not exists!');
+      const user = await User.findOne({ mobile: args.mobile });
+      if (!user) {
+        throw new Error('Mobile num not exists!');
       }
-
-      if (user) {
-        const isEqual = await bcrypt.compare(args.password, user.password);
-
-        if (!isEqual) {
-          throw new Error('invalid password!');
-        }
+      const isEqual = await bcrypt.compare(args.password, user.password);
+      if (!isEqual) {
+        throw new Error('Invalid password!');
       }
-
-      console.log(args.mobile);
-
       const token = jwt.sign(
-        { mobile: args.mobile },
-        'fjdfhkry8i46328yasjfhwi7r8q3ryifh',
-        { expiresIn: '1h' }
+        { mobile: user.mobile, userId: user._id },
+        process.env.SECRET_SUPER_KEY,
+        { expiresIn: process.env.TOKEN_EXPIRY }
       );
-
       return {
-        userId: args.userInput.userId,
-        mobile: args.mobile,
+        userId: user._id,
+        mobile: user.mobile,
         token: token,
-        tokenExpiration: 1,
+        tokenExpiration: process.env.TOKEN_INT_EXPIRY,
       };
     } catch (err) {
       throw err;
@@ -64,7 +55,7 @@ exports.queryResolver = {
           auth: process.env.DATAGEN_AUTHKEY,
           senderid: process.env.DATAGEN_SENDERID,
           msisdn: args.sendCodeInput.mobile,
-          message: `Your one time password is ${otp}.this otp will expire in 1 minute `,
+          message: `Your one time password is ${otp}.this otp will expire in 30 minutes `,
         },
         strictSSL: false,
         rejectUnauthorized: false,
@@ -72,7 +63,6 @@ exports.queryResolver = {
           'cache-control': 'no-cache',
         },
       };
-      console.log(otp);
       req.session.otp = otp;
       req.session.mobile = args.sendCodeInput.mobile;
       let sendOtp = new Promise((resolve, reject) => {
