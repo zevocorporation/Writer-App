@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createContext } from 'react'
 import Navbar from './patterns/navbar'
 import LandingPage from './pages/landingPage'
+import SignupPage from './pages/signupPage'
+import ResetPage from './pages/Resetpage'
 
 import DetectDevice from './helpers/detectDevice'
 
@@ -19,6 +21,8 @@ function App() {
     <DeviceContext.Provider value={device}>
       <Navbar />
       <LandingPage />
+      <ResetPage />
+      <SignupPage />
     </DeviceContext.Provider>
   )
 }

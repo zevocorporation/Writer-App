@@ -2,14 +2,15 @@ import React from 'react'
 
 import Hero from '../components/hero'
 import Statistics from '../components/statistics'
+import Form from '../patterns/form'
 
-function LandingPage(props) {
+function SignupPage(props) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
-      <Hero type="login"/>
+    <div>
+      <Hero type='signup' />
       <Statistics />
     </div>
   )
 }
 
-export default LandingPage
+export default SignupPage
