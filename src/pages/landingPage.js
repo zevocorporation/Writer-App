@@ -6,7 +6,7 @@ import Statistics from '../components/statistics'
 function LandingPage(props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
-      <Hero />
+      <Hero type="login"/>
       <Statistics />
     </div>
   )

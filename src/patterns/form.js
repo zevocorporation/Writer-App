@@ -1,6 +1,5 @@
 import React from 'react'
 import Colors from '../styles/colors'
-
 import Input from '../components/input'
 import Button from '../components/button'
 import Text from '../components/text'
