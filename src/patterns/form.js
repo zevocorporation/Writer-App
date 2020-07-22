@@ -22,12 +22,12 @@ function Form(props) {
     <form style={styles.form}>
       <Title color={Colors.secondary}>Login</Title>
       <Input type='number' placeholder='mobile' />
-      <Input type='password' placeholder='password' />
+      <Input inputType='password' type='password' placeholder='password' />
       <Button name='Login' />
-      <Text style={{ textAlign: 'center' }} type='link'>
+      <Text style={{ textAlign: 'center', fontSize: '14px' }} type='link'>
         Forgot password? Reset now
       </Text>
-      <Text style={{ textAlign: 'center' }} type='link'>
+      <Text style={{ textAlign: 'center', fontSize: '14px' }} type='link'>
         Don't have an account? Create one
       </Text>
     </form>

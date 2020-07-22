@@ -6,6 +6,7 @@ function Statistics(props) {
     statistics: {
       display: 'flex',
       flexDirection: 'row',
+      backgroundColor: Colors.primaryLight,
       maxWidth: '100%',
       minHeight: '28vh',
       padding: '16px',

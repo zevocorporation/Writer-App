@@ -1,6 +1,4 @@
 import React from 'react'
-import Input from '../components/input'
-import Button from '../components/button'
 
 import Colors from '../styles/colors'
 
@@ -30,7 +28,7 @@ function Navbar() {
       name: 'Login',
     },
     {
-      id: 1,
+      id: 2,
       name: 'Signup',
     },
   ]
