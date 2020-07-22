@@ -3,13 +3,14 @@ import React from 'react'
 import Login from './components/login'
 import Navbar from './patterns/navbar'
 // import LandingPage from './pages/landingPage'
-import SignupPage from './pages/signupPage';
+//import SignupPage from './pages/signupPage';
+import ResetPage from './pages/Resetpage';
 
 function App() {
   return (
     <div>
       <Navbar />
-      <SignupPage />
+      <ResetPage />
     </div>
   )
 }
