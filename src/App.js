@@ -1,17 +1,15 @@
-import React from 'react';
+import React from 'react'
 // import Input from './components/input';
-import Login from './components/login';
-
+import Login from './components/login'
+import Navbar from './patterns/navbar'
 
 function App() {
   return (
     <div>
-      <p>App</p>
-      {/* <Input type='h' /> */}
+      <Navbar />
       <Login />
-      
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
