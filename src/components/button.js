@@ -1,32 +1,38 @@
 import React from 'react'
-import Colors from '../styles/colors'
+import { Colors } from '../styles/styles'
 
 function Button(props) {
-  const styles = {
-    button: {
-      padding: '12px 5%',
-      backgroundColor: props.color ? props.color : Colors.secondary,
-      color: Colors.accent.secondary,
-      border: 'none',
-      borderRadius: '8px',
-      fontFamily: 'Quicksand',
-      fontSize: '16px',
-      marginTop: '16px',
-      marginBottom: '16px',
-      maxWidth: '100%',
-      minWidth: '280px',
-      outline: 'none',
-      cursor: 'pointer',
-      ...props.style,
-    },
-  }
-  const renderbutton = (
-    <button onClick={props.onClick} style={styles.button}>
-      {props.name}
-    </button>
-  )
+     const styles = {
+          button: {
+               padding: '12px 5%',
+               backgroundColor: props.color
+                    ? props.color
+                    : Colors.secondary,
+               color: Colors.accent.secondary,
+               border: 'none',
+               borderRadius: '8px',
+               fontFamily: 'Quicksand',
+               fontSize: '16px',
+               marginTop: '16px',
+               marginBottom: '16px',
+               maxWidth: '100%',
+               minWidth: '280px',
+               outline: 'none',
+               cursor: 'pointer',
+               ...props.style,
+          },
+     }
+     const renderbutton = (
+          <button
+               type={props.type}
+               onClick={props.onClick}
+               style={styles.button}
+          >
+               {props.name}
+          </button>
+     )
 
-  return renderbutton
+     return renderbutton
 }
 
 export default Button
