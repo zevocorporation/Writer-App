@@ -1,3 +1,3 @@
-import AuthReducer from './authReducer'
+import UserReducer from './userReducer'
 
-export { AuthReducer }
+export { UserReducer }

@@ -21,7 +21,7 @@ import NavlinksData from './data/navlinks'
 
 import { DetectDevice } from './helpers/helpers'
 import { UserContext } from './store/contexts/contexts'
-import { AuthReducer } from './store/reducers/reducers'
+import { UserReducer } from './store/reducers/reducers'
 
 const DeviceContext = createContext({
      device: 'desktop',
@@ -29,7 +29,7 @@ const DeviceContext = createContext({
 
 function App() {
      const [device, setDevice] = useState(DetectDevice())
-     const [state, dispatch] = useReducer(AuthReducer, {})
+     const [state, dispatch] = useReducer(UserReducer, {})
      const [isLoggedIn, setIsLoggedIn] = useState(false)
 
      async function updateUser() {

@@ -1,4 +1,4 @@
-const AuthReducer = (state, action) => {
+const userReducer = (state, action) => {
      const { type, payload } = action
      switch (type) {
           default:
@@ -20,7 +20,19 @@ const AuthReducer = (state, action) => {
                     ...state,
                     isLoggedIn: false,
                }
+          case 'RESET_PASSWORD':
+               console.log('resetting password')
+               return {
+                    ...state,
+                    isLoggedIn: false,
+               }
+          case 'SIGNUP':
+               console.log('signing up')
+               return {
+                    ...state,
+                    isLoggedIn: false,
+               }
      }
 }
 
-export default AuthReducer
+export default userReducer
