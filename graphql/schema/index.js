@@ -3,6 +3,11 @@ const { gql } = require('apollo-server');
 const typeDefs = gql`
   scalar DateTime
 
+  enum pageType {
+    SIGN_UP
+    RESET_PASSWORD
+  }
+
   type User {
     _id: ID!
     mobile: String!
@@ -28,23 +33,30 @@ const typeDefs = gql`
     updatedAt: DateTime!
   }
 
-  type AuthData {
-    userId: ID!
+  type userData {
+    _id: ID!
     mobile: String!
     token: String!
     tokenExpiration: Int!
   }
 
-  input UserInput {
-    pageType: String!
+  input LoginInput {
     mobile: String!
-    otp: String!
     password: String!
-    confirmPassword: String!
+  }
+
+  input SignUpInput {
+    code: String!
+    password: String!
+  }
+
+  input ResetPasswordInput {
+    code: String!
+    newPassword: String!
   }
 
   input SendCodeInput {
-    pageType: String!
+    pageType: pageType!
     mobile: String!
   }
 
@@ -61,7 +73,7 @@ const typeDefs = gql`
     abstract: String!
   }
 
-  input EditAbstractInput {
+  input UpdateAbstractInput {
     _id: ID!
     title: String!
     significance: String!
@@ -75,17 +87,19 @@ const typeDefs = gql`
   }
 
   type Query {
-    login(mobile: String!, password: String!): AuthData!
     sendCode(sendCodeInput: SendCodeInput): Boolean!
-    getUsersParticularAbstract(abstractId: String!): Abstract!
-    getUsersAbstract: [Abstract!]!
+    verifyCode(code: String!): Boolean!
+    login(loginInput: LoginInput): userData!
+    getUserAbstractDocument(abstractId: ID!): Abstract!
+    getUserAbstracts: [Abstract!]!
   }
 
   type Mutation {
-    signUpAndResetPassword(userInput: UserInput): User
+    signUp(signUpInput: SignUpInput): User
+    resetPassword(resetPasswordInput: ResetPasswordInput): User
     createAbstract(abstractInput: AbstractInput): Abstract
-    editAbstract(editAbstractInput: EditAbstractInput): Abstract
-    deleteAbstract(abstractId: String!): Abstract
+    updateAbstract(updateAbstractInput: UpdateAbstractInput): Abstract
+    deleteAbstract(abstractId: ID!): Abstract
   }
 `;
 

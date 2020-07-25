@@ -7,44 +7,18 @@ require('dotenv').config();
 const User = require('../../models/user');
 
 exports.queryResolver = {
-  login: async (_, args) => {
-    try {
-      const user = await User.findOne({ mobile: args.mobile });
-      if (!user) {
-        throw new Error('Mobile num not exists!');
-      }
-      const isEqual = await bcrypt.compare(args.password, user.password);
-      if (!isEqual) {
-        throw new Error('Invalid password!');
-      }
-      const token = jwt.sign(
-        { mobile: user.mobile, userId: user._id },
-        process.env.SECRET_SUPER_KEY,
-        { expiresIn: process.env.TOKEN_EXPIRY }
-      );
-      return {
-        userId: user._id,
-        mobile: user.mobile,
-        token: token,
-        tokenExpiration: process.env.TOKEN_INT_EXPIRY,
-      };
-    } catch (err) {
-      throw err;
-    }
-  },
-
   sendCode: async (_, args, { req }) => {
     try {
       const numberExists = await User.findOne({
         mobile: args.sendCodeInput.mobile,
       });
-      if (args.sendCodeInput.pageType === 'SIGNUP' && numberExists) {
-        throw new Error('Mobile number already exists');
+      if (args.sendCodeInput.pageType == 'SIGNUP' && numberExists) {
+        throw new Error('You already have an account. Please login.');
       } else if (
-        args.sendCodeInput.pageType === 'RESETPASSWORD' &&
+        args.sendCodeInput.pageType == 'RESETPASSWORD' &&
         !numberExists
       ) {
-        throw new Error('Mobile number does not exists');
+        throw new Error("Account doesn't exist. Please create one.");
       }
       let otpSent = false;
       const otp = await Math.floor(1000 + Math.random() * 9000);
@@ -55,7 +29,7 @@ exports.queryResolver = {
           auth: process.env.DATAGEN_AUTHKEY,
           senderid: process.env.DATAGEN_SENDERID,
           msisdn: args.sendCodeInput.mobile,
-          message: `Your one time password is ${otp}. This otp will expire in 30 minutes.`,
+          message: `Your ${process.env.app_name} verification code is ${otp}. This code will expire in ${process.env.time} minutes. Please don't share this code for security reasons.`,
         },
         strictSSL: false,
         rejectUnauthorized: false,
@@ -82,43 +56,109 @@ exports.queryResolver = {
       if (otpSent) return true;
       return false;
     } catch (err) {
-      throw err;
+      return err;
+    }
+  },
+
+  verifyCode: async (_, args, { req }) => {
+    try {
+      const code = args.code;
+      code.trim();
+      if (code.length != 4) {
+        throw new Error('Wrong verification code.');
+      }
+      if (code != req.session.otp) {
+        throw new Error('Verification code is mismatching. Check again.');
+      }
+      return true;
+    } catch (err) {
+      return err;
+    }
+  },
+
+  login: async (_, args) => {
+    try {
+      const user = await User.findOne({ mobile: args.loginInput.mobile });
+      if (!user) {
+        throw new Error("This account doesn't exist. Please create one.");
+      }
+      const isEqual = await bcrypt.compare(
+        args.loginInput.password,
+        user.password
+      );
+      if (!isEqual) {
+        throw new Error('Wrong password.');
+      }
+      const token = jwt.sign(
+        { mobile: user.mobile, userId: user._id },
+        process.env.SECRET_SUPER_KEY,
+        { expiresIn: process.env.TOKEN_EXPIRY }
+      );
+      return {
+        _id: user._id,
+        mobile: user.mobile,
+        token: token,
+        tokenExpiration: process.env.TOKEN_INT_EXPIRY,
+      };
+    } catch (err) {
+      return err;
     }
   },
 };
 
 exports.mutationResolver = {
-  signUpAndResetPassword: async (_, args, { req }) => {
+  signUp: async (_, args, { req }) => {
     try {
-      const otp = args.userInput.otp;
-      otp.trim();
-      if (otp.length != 4) {
-        throw new Error('Otp is invalid');
+      const code = args.signUpInput.code;
+      code.trim();
+      const hashedPassword = await bcrypt.hash(args.signUpInput.password, 12);
+      if (code.length != 4) {
+        throw new Error(
+          'Unauthorized access. Please verify your mobile number'
+        );
       }
-      if (otp != req.session.otp) {
-        throw new Error('Otp mismatch');
+      if (code != req.session.otp) {
+        throw new Error(
+          'Unauthorized access. Please verify your mobile number'
+        );
       }
-      if (args.userInput.password !== args.userInput.confirmPassword) {
-        throw new Error('Password and confirm Password does not match');
-      }
-      const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      if (args.userInput.pageType == 'SIGNUP') {
-        const user = new User({
-          mobile: req.session.mobile.trim(),
-          password: hashedPassword.trim(),
-        });
-        const result = await user.save();
-        return result;
-      } else if (args.userInput.pageType == 'RESETPASSWORD') {
-        const existingUser = await User.findOne({
-          mobile: req.session.mobile,
-        });
-        existingUser.password = hashedPassword;
-        await existingUser.save();
-        return existingUser;
-      }
+      const user = new User({
+        mobile: req.session.mobile.trim(),
+        password: hashedPassword.trim(),
+      });
+      const result = await user.save();
+      return result;
     } catch (err) {
-      throw err;
+      return err;
+    }
+  },
+
+  resetPassword: async (_, args, { req }) => {
+    try {
+      const code = args.resetPasswordInput.code;
+      code.trim();
+      const hashedPassword = await bcrypt.hash(
+        args.resetPasswordInput.newPassword,
+        12
+      );
+      if (code.length != 4) {
+        throw new Error(
+          'Unauthorized access. Please verify your mobile number'
+        );
+      }
+      if (code != req.session.otp) {
+        throw new Error(
+          'Unauthorized access. Please verify your mobile number'
+        );
+      }
+      const existingUser = await User.findOne({
+        mobile: req.session.mobile,
+      });
+      existingUser.password = hashedPassword;
+      await existingUser.save();
+      return existingUser;
+    } catch (err) {
+      return err;
     }
   },
 };
