@@ -12,10 +12,10 @@ exports.queryResolver = {
       const numberExists = await User.findOne({
         mobile: args.sendCodeInput.mobile,
       });
-      if (args.sendCodeInput.pageType == 'SIGNUP' && numberExists) {
+      if (args.sendCodeInput.pageType == 'SIGN_UP' && numberExists) {
         throw new Error('You already have an account. Please login.');
       } else if (
-        args.sendCodeInput.pageType == 'RESETPASSWORD' &&
+        args.sendCodeInput.pageType == 'RESET_PASSWORD' &&
         !numberExists
       ) {
         throw new Error("Account doesn't exist. Please create one.");
