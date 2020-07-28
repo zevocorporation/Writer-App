@@ -3,7 +3,7 @@ const { gql } = require('apollo-server');
 const typeDefs = gql`
   scalar DateTime
 
-  enum pageType {
+  enum Type {
     SIGN_UP
     RESET_PASSWORD
   }
@@ -56,7 +56,7 @@ const typeDefs = gql`
   }
 
   input SendCodeInput {
-    pageType: pageType!
+    type: Type!
     mobile: String!
   }
 
@@ -87,14 +87,14 @@ const typeDefs = gql`
   }
 
   type Query {
-    sendCode(sendCodeInput: SendCodeInput): Boolean!
-    verifyCode(code: String!): Boolean!
-    login(loginInput: LoginInput): userData!
     getUserAbstractDocument(abstractId: ID!): Abstract!
     getUserAbstracts: [Abstract!]!
   }
 
   type Mutation {
+    sendCode(sendCodeInput: SendCodeInput): Boolean
+    verifyCode(code: String!): Boolean
+    login(loginInput: LoginInput): userData
     signUp(signUpInput: SignUpInput): User
     resetPassword(resetPasswordInput: ResetPasswordInput): User
     createAbstract(abstractInput: AbstractInput): Abstract

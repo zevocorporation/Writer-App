@@ -6,11 +6,15 @@ require('dotenv').config();
 
 const User = require('../../models/user');
 
-exports.queryResolver = {
+exports.mutationResolver = {
   sendCode: async (_, args, { req }) => {
     try {
+      const mobileNumber = args.sendCodeInput.mobile.trim();
+      if (mobileNumber.length != 10) {
+        throw new Error('Wrong mobile number.');
+      }
       const numberExists = await User.findOne({
-        mobile: args.sendCodeInput.mobile,
+        mobile: mobileNumber,
       });
       if (args.sendCodeInput.pageType == 'SIGN_UP' && numberExists) {
         throw new Error('You already have an account. Please login.');
@@ -28,7 +32,7 @@ exports.queryResolver = {
         qs: {
           auth: process.env.DATAGEN_AUTHKEY,
           senderid: process.env.DATAGEN_SENDERID,
-          msisdn: args.sendCodeInput.mobile,
+          msisdn: mobileNumber,
           message: `Your ${process.env.app_name} verification code is ${otp}. This code will expire in ${process.env.time} minutes. Please don't share this code for security reasons.`,
         },
         strictSSL: false,
@@ -38,7 +42,7 @@ exports.queryResolver = {
         },
       };
       req.session.otp = otp;
-      req.session.mobile = args.sendCodeInput.mobile;
+      req.session.mobile = mobileNumber;
       let sendOtp = new Promise((resolve, reject) => {
         request(options, (error, response, body) => {
           if (error) reject(error);
@@ -48,7 +52,8 @@ exports.queryResolver = {
       await sendOtp
         .then((result) => {
           console.log(result);
-          otpSent = true;
+          console.log(result[16]);
+          if (result[16] == 's') otpSent = true;
         })
         .catch((err) => {
           throw err;
@@ -56,7 +61,7 @@ exports.queryResolver = {
       if (otpSent) return true;
       return false;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 
@@ -72,7 +77,7 @@ exports.queryResolver = {
       }
       return true;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 
@@ -101,12 +106,9 @@ exports.queryResolver = {
         tokenExpiration: process.env.TOKEN_INT_EXPIRY,
       };
     } catch (err) {
-      return err;
+      throw err;
     }
   },
-};
-
-exports.mutationResolver = {
   signUp: async (_, args, { req }) => {
     try {
       const code = args.signUpInput.code;
@@ -129,7 +131,7 @@ exports.mutationResolver = {
       const result = await user.save();
       return result;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 
@@ -158,7 +160,7 @@ exports.mutationResolver = {
       await existingUser.save();
       return existingUser;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 };

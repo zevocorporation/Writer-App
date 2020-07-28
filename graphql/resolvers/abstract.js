@@ -10,7 +10,7 @@ exports.queryResolver = {
       }
       return particularAbstract;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 
@@ -23,7 +23,7 @@ exports.queryResolver = {
       }
       throw new Error("You haven't created any abstracts. Create one.");
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 };
@@ -47,7 +47,7 @@ exports.mutationResolver = {
       const result = await newAbstract.save();
       return result;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
   updateAbstract: async (_, args, { req }) => {
@@ -70,7 +70,7 @@ exports.mutationResolver = {
       const editedAbstract = await getAbstract.save();
       return editedAbstract;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
   deleteAbstract: async (_, args, { req }) => {
@@ -81,7 +81,7 @@ exports.mutationResolver = {
       );
       return abstractToDelete;
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 };

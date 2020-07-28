@@ -6,7 +6,6 @@ const user = require('./user');
 const resolvers = {
   Query: {
     ...abstract.queryResolver,
-    ...user.queryResolver,
   },
 
   Mutation: {
