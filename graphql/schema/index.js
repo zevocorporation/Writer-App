@@ -47,16 +47,22 @@ const typeDefs = gql`
 
   input SignUpInput {
     code: String!
+    mobile: String!
     password: String!
   }
 
   input ResetPasswordInput {
     code: String!
+    mobile: String!
     newPassword: String!
   }
 
   input SendCodeInput {
     type: Type!
+    mobile: String!
+  }
+  input VerifyCodeInput {
+    code: String!
     mobile: String!
   }
 
@@ -93,7 +99,7 @@ const typeDefs = gql`
 
   type Mutation {
     sendCode(sendCodeInput: SendCodeInput): Boolean
-    verifyCode(code: String!): Boolean
+    verifyCode(verifyCodeInput: VerifyCodeInput): Boolean
     login(loginInput: LoginInput): userData
     signUp(signUpInput: SignUpInput): User
     resetPassword(resetPasswordInput: ResetPasswordInput): User

@@ -11,21 +11,22 @@ exports.mutationResolver = {
     try {
       const mobileNumber = args.sendCodeInput.mobile.trim();
       if (mobileNumber.length != 10) {
-        throw new Error('Wrong mobile number.');
+        throw new Error('Please enter a valid mobile number.');
+      }
+      const typeNumber = /^[0-9]+$/;
+      if (!mobileNumber.match(typeNumber)) {
+        throw new Error('Please enter a valid mobile number.');
       }
       const numberExists = await User.findOne({
         mobile: mobileNumber,
       });
-      if (args.sendCodeInput.pageType == 'SIGN_UP' && numberExists) {
+      if (args.sendCodeInput.type == 'SIGN_UP' && numberExists) {
         throw new Error('You already have an account. Please login.');
-      } else if (
-        args.sendCodeInput.pageType == 'RESET_PASSWORD' &&
-        !numberExists
-      ) {
+      } else if (args.sendCodeInput.type == 'RESET_PASSWORD' && !numberExists) {
         throw new Error("Account doesn't exist. Please create one.");
       }
       let otpSent = false;
-      const otp = await Math.floor(1000 + Math.random() * 9000);
+      const otp = await Math.floor(100000 + Math.random() * 900000);
       const options = {
         method: 'GET',
         url: 'https://global.datagenit.com/API/sms-api.php',
@@ -67,10 +68,16 @@ exports.mutationResolver = {
 
   verifyCode: async (_, args, { req }) => {
     try {
-      const code = args.code;
-      code.trim();
-      if (code.length != 4) {
-        throw new Error('Wrong verification code.');
+      if (req.session.mobile != args.verifyCodeInput.mobile) {
+        throw new Error('Mismatching verification code');
+      }
+      const code = args.verifyCodeInput.code.trim();
+      if (code.length != 6) {
+        throw new Error('Invalid verification code.');
+      }
+      const typeNumber = /^[0-9]+$/;
+      if (!code.match(typeNumber)) {
+        throw new Error('Invalid verification code.');
       }
       if (code != req.session.otp) {
         throw new Error('Verification code is mismatching. Check again.');
@@ -111,10 +118,18 @@ exports.mutationResolver = {
   },
   signUp: async (_, args, { req }) => {
     try {
-      const code = args.signUpInput.code;
-      code.trim();
-      const hashedPassword = await bcrypt.hash(args.signUpInput.password, 12);
-      if (code.length != 4) {
+      const code = args.signUpInput.code.trim();
+      userPassword = args.signUpInput.password.trim();
+      if (req.session.mobile != args.signUpInput.mobile) {
+        throw new Error('Wrong mobile number.');
+      }
+      if (code.length != 6) {
+        throw new Error(
+          'Unauthorized access. Please verify your mobile number'
+        );
+      }
+      const typeNumber = /^[0-9]+$/;
+      if (!code.match(typeNumber)) {
         throw new Error(
           'Unauthorized access. Please verify your mobile number'
         );
@@ -124,6 +139,13 @@ exports.mutationResolver = {
           'Unauthorized access. Please verify your mobile number'
         );
       }
+      if (userPassword.length < 8) {
+        throw new Error('Passwords should contain atleast 8 characters');
+      }
+      if (userPassword.length > 20) {
+        throw new Error('Passwords can only contain maximum 20 characters');
+      }
+      const hashedPassword = await bcrypt.hash(userPassword, 12);
       const user = new User({
         mobile: req.session.mobile.trim(),
         password: hashedPassword.trim(),
@@ -137,13 +159,18 @@ exports.mutationResolver = {
 
   resetPassword: async (_, args, { req }) => {
     try {
-      const code = args.resetPasswordInput.code;
-      code.trim();
-      const hashedPassword = await bcrypt.hash(
-        args.resetPasswordInput.newPassword,
-        12
-      );
-      if (code.length != 4) {
+      const code = args.resetPasswordInput.code.trim();
+      userPassword = args.resetPasswordInput.newPassword.trim();
+      if (req.session.mobile != args.resetPasswordInput.mobile) {
+        throw new Error('Wrong mobile number.');
+      }
+      if (code.length != 6) {
+        throw new Error(
+          'Unauthorized access. Please verify your mobile number'
+        );
+      }
+      const typeNumber = /^[0-9]+$/;
+      if (!code.match(typeNumber)) {
         throw new Error(
           'Unauthorized access. Please verify your mobile number'
         );
@@ -153,6 +180,13 @@ exports.mutationResolver = {
           'Unauthorized access. Please verify your mobile number'
         );
       }
+      if (userPassword.length < 8) {
+        throw new Error('Passwords should contain atleast 8 characters');
+      }
+      if (userPassword.length > 20) {
+        throw new Error('Passwords can only contain maximum 20 characters');
+      }
+      const hashedPassword = await bcrypt.hash(userPassword, 12);
       const existingUser = await User.findOne({
         mobile: req.session.mobile,
       });
