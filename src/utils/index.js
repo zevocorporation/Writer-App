@@ -1,4 +1,5 @@
 import DetectDevice from './detectDevice'
 import InputValidator from './inputValidator'
+import { Client } from './client'
 
-export { DetectDevice, InputValidator }
+export { DetectDevice, InputValidator, Client }

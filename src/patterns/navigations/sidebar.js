@@ -1,35 +1,34 @@
 import React from 'react'
-import { Link } from '../../components/components'
-import { Colors } from '../../styles/styles'
+import {} from 'react-router-dom'
+import { Link } from '../../components/index'
+import { Colors } from '../../styles/base'
 
 function Sidebar(props) {
-     const styles = {
-          sidebar: {
-               backgroundColor: Colors.tertiary,
-               position: 'absolute',
-               top: 0,
-               left: 0,
-               zIndex: -1,
-               padding: '12vh 16px 16px 16px',
-               maxWidth: '15%',
-               minWidth: '10%',
-               height: '85.6vh',
-          },
-     }
-     return (
-          <div style={styles.sidebar}>
-               <Link
-                    to='/abstracts'
-                    style={{
-                         color: Colors.accent.secondary,
-                         fontSize: '2.5vh',
-                         fontWeight: 580,
-                    }}
-               >
-                    Abstracts
-               </Link>
-          </div>
-     )
+   const styles = {
+      sidebar: {
+         backgroundColor: Colors.tertiary,
+         position: 'absolute',
+         top: 52,
+         left: 0,
+         padding: '16px',
+         width: '12vw',
+         height: '87vh',
+      },
+   }
+   return (
+      <div style={styles.sidebar}>
+         <Link
+            to='/list'
+            style={{
+               color: Colors.accent.secondary,
+               fontSize: '2.5vh',
+               fontWeight: 580,
+            }}
+         >
+            Abstracts
+         </Link>
+      </div>
+   )
 }
 
 export default Sidebar
