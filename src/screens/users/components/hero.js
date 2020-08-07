@@ -26,7 +26,7 @@ function Hero(props) {
             width: '90%',
             padding: '2% 5%',
             justifyContent: 'center',
-            minHeight: '55vh',
+            minHeight: '40vh',
          },
          right: {
             display: 'flex',
@@ -34,7 +34,6 @@ function Hero(props) {
             padding: '2% 5%',
             justifyContent: 'center',
          },
-         backgroundColor: 'green',
          width: '100%',
          maxWidth: '100%',
       },

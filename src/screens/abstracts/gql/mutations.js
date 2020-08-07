@@ -64,6 +64,18 @@ const UPDATE_ABSTRACT = gql`
          }
       ) {
          _id
+         title
+         createdAt
+         updatedAt
+         subject
+         significance
+         description
+         knowledgeGap
+         researchQuestion
+         hypothesis
+         majorTrends
+         conclusion
+         abstract
       }
    }
 `

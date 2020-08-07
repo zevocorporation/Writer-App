@@ -1,10 +1,11 @@
 import React from 'react'
-import { Text, Input, Alert, Button } from '../../../components'
+import { Text, Title, Input, Alert, Button } from '../../../components'
 import Styles from '../../../styles/styles'
+import { Colors } from '../../../styles/base/index'
 
 function EditAbstract(props) {
-   function update() {
-      props.update({
+   async function update() {
+      const res = await props.update({
          variables: {
             id: props.abstract._id,
             title: props.watch('title'),
@@ -18,7 +19,20 @@ function EditAbstract(props) {
             abstract: props.watch('abstract'),
          },
       })
+      if (res.data?.updateAbstract) {
+         props.history.push('/abstracts')
+      }
    }
+
+   const finalAbstract =
+      props.watch('significance') +
+      props.watch('description') +
+      props.watch('knowledgeGap') +
+      props.watch('researchQuestion') +
+      props.watch('hypothesis') +
+      props.watch('majorTrends') +
+      props.watch('conclusion')
+
    const renderAbstract = (
       <React.Fragment>
          <div style={Styles.form.textControl}>
@@ -30,18 +44,12 @@ function EditAbstract(props) {
                name='title'
             />
          </div>
-         <div style={Styles.form.textControl}>
-            <Text>Subject</Text>
-            <Input
-               type='text'
-               defaultValue={props.abstract.subject}
-               register={props.register}
-               name='subject'
-            />
-         </div>
+
          <div style={Styles.form.textControl}>
             <Text>Purpose and Significance</Text>
             <Input
+               text={props.watch('significance')}
+               wordLimit={25}
                type='textArea'
                register={props.register}
                name='significance'
@@ -54,6 +62,8 @@ function EditAbstract(props) {
             <Text>Description/Design</Text>
             <Input
                type='textArea'
+               text={props.watch('description')}
+               wordLimit={35}
                register={props.register}
                name='description'
                style={Styles.form.textAreaInput}
@@ -64,6 +74,8 @@ function EditAbstract(props) {
          <div style={Styles.form.textControl}>
             <Text>Knowledge gap/Conflict/Limitations</Text>
             <Input
+               text={props.watch('knowledgeGap')}
+               wordLimit={35}
                type='textArea'
                register={props.register}
                name='knowledgeGap'
@@ -76,6 +88,8 @@ function EditAbstract(props) {
             <Text>Research question/Statement</Text>
             <Input
                type='textArea'
+               text={props.watch('researchQuestion')}
+               wordLimit={35}
                register={props.register}
                name='researchQuestion'
                style={Styles.form.textAreaInput}
@@ -87,6 +101,8 @@ function EditAbstract(props) {
             <Text>Hypothesis/Study plan</Text>
             <Input
                type='textArea'
+               text={props.watch('hypothesis')}
+               wordLimit={35}
                register={props.register}
                name='hypothesis'
                style={Styles.form.textAreaInput}
@@ -98,6 +114,8 @@ function EditAbstract(props) {
             <Text>Major trends/findings</Text>
             <Input
                type='textArea'
+               text={props.watch('majorTrends')}
+               wordLimit={35}
                register={props.register}
                name='majorTrends'
                style={Styles.form.textAreaInput}
@@ -109,6 +127,8 @@ function EditAbstract(props) {
             <Text>Conclusion/Implications</Text>
             <Input
                type='textArea'
+               text={props.watch('conclusion')}
+               wordLimit={35}
                register={props.register}
                name='conclusion'
                style={Styles.form.textAreaInput}
@@ -117,43 +137,50 @@ function EditAbstract(props) {
             </Input>
          </div>
          <div style={Styles.form.textControl}>
-            <Text>Your abstract</Text>
-            <Input
-               type='textArea'
-               style={Styles.form.textAreaInput}
-               register={props.register}
-               name='abstract'
-               defaultValue={
-                  props.watch('significance') +
-                  ' ' +
-                  props.watch('description') +
-                  ' ' +
-                  props.watch('knowledgeGap') +
-                  ' ' +
-                  props.watch('researchQuestion') +
-                  ' ' +
-                  props.watch('hypothesis') +
-                  ' ' +
-                  props.watch('majorTrends') +
-                  ' ' +
-                  props.watch('conclusion')
-               }
-            />
-            {props.error && (
-               <Alert type='ERROR_MESSAGE'>{props.error.message}</Alert>
-            )}
-            <Button
-               style={{ width: '280px' }}
-               name='Create'
-               onClick={() => {
-                  update()
+            <Text
+               style={{
+                  margin: '32px 0px 32px 0px',
+                  backgroundColor: Colors.alert.success,
+                  color: Colors.accent.secondary,
+                  padding: '8px 32px 8px 32px',
+                  width: 'fit-content',
+                  borderRadius: '8px',
                }}
+               type='textBold'
+            >
+               Your abstract
+            </Text>{' '}
+            <Input
+               style={{ paddingTop: '16px' }}
+               type='textArea'
+               register={props.register}
+               disabled={true}
+               name='abstract'
+               value={finalAbstract}
             />
          </div>
       </React.Fragment>
    )
 
-   return renderAbstract
+   return (
+      <div style={Styles.dashboard}>
+         <div style={Styles.dashboard.header}>
+            <Title>Edit Abstract</Title>
+            <Button
+               style={{ width: '280px' }}
+               name='Save changes'
+               onClick={() => update()}
+            />
+         </div>
+         <div style={Styles.dashboard.content}>
+            {props.error && (
+               <Alert type='ERROR_MESSAGE'>{props.error.message}</Alert>
+            )}
+            {props.loading && <h1>loading...</h1>}
+            {renderAbstract}
+         </div>
+      </div>
+   )
 }
 
 export default EditAbstract

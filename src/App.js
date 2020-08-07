@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+   BrowserRouter as Router,
+   Route,
+   Switch,
+   useHistory,
+   Redirect,
+} from 'react-router-dom'
 
 import { Navbar, Sidebar } from './patterns/navigations'
 
 import { Landing, Dashboard } from './screens/users/components/index'
-
 import NavlinksData from './data/navlinks'
 
 import { DetectDevice } from './utils'
@@ -14,6 +19,7 @@ import { UserReducer } from './store/reducers/index'
 function App() {
    const [device, setDevice] = useState(DetectDevice())
    const [state, dispatch] = useReducer(UserReducer, {})
+   const history = useHistory()
 
    useEffect(() => {
       function handle() {
@@ -27,7 +33,7 @@ function App() {
             payload: login,
          })
       }
-   }, [])
+   }, [dispatch])
 
    const renderDashboard = (
       <React.Fragment>

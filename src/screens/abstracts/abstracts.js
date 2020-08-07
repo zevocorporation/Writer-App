@@ -1,12 +1,15 @@
-import React, { useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 import { useForm } from 'react-hook-form'
-import Styles from '../../styles/styles'
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom'
 
-import { Alert, Title, Button, AbstractCard } from '../../components'
+import {
+   ListAbstracts,
+   CreateAbstract,
+   ViewAbstract,
+   EditAbstract,
+} from './components/index'
 
-import { CreateAbstract, ViewAbstract, EditAbstract } from './components/index'
-
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { AbstractReducer } from '../../store/reducers'
 
 import { LOAD_ABSTRACTS, OPEN_ABSTRACT_FILE } from './gql/queries'
@@ -20,7 +23,13 @@ import {
 function Abstracts(props) {
    const { watch, register } = useForm()
    const [state, dispatch] = useReducer(AbstractReducer)
-   const [action, setAction] = useState()
+   const history = useHistory()
+
+   function useRouteQuery() {
+      return new URLSearchParams(useLocation().search)
+   }
+
+   const routeQuery = useRouteQuery()
 
    const { loading, error: loadError } = useQuery(LOAD_ABSTRACTS, {
       errorPolicy: 'all',
@@ -29,7 +38,6 @@ function Abstracts(props) {
             type: 'LOAD_ABSTRACTS',
             payload: getUserAbstracts,
          })
-         setAction('LIST')
       },
    })
 
@@ -46,17 +54,14 @@ function Abstracts(props) {
       },
    })
 
-   const [
-      openAbstract,
-      { data: abstractFile, loading: opening, error: openError },
-   ] = useLazyQuery(OPEN_ABSTRACT_FILE, {
+   const { loading: opening, error: openError } = useQuery(OPEN_ABSTRACT_FILE, {
       errorPolicy: 'all',
+      variables: { id: routeQuery.get('id') },
       onCompleted({ getUserAbstractDocument }) {
          dispatch({
             type: 'OPEN_ABSTRACT_FILE',
             payload: getUserAbstractDocument,
          })
-         setAction('VIEW')
       },
    })
 
@@ -86,96 +91,57 @@ function Abstracts(props) {
       errorPolicy: 'all',
    })
 
-   function getTitle() {
-      if (action === 'LIST') return 'Manage Abstracts'
-      if (action === 'CREATE') return 'Create abstract'
-      if (action === 'VIEW') return state.abstractFile?.title
-      if (action === 'EDIT') return 'Edit abstract'
-   }
-
-   function getButtonName() {
-      if (action === 'LIST' || !state?.myAbstracts) return 'Create abstract'
-      if (action === 'CREATE') return 'Create'
-      if (action === 'VIEW') return 'Edit abstract'
-      if (action === 'EDIT') return 'Save Changes'
-   }
-
-   function getAction() {
-      if (action === 'LIST') return () => create()
-      if (action === 'CREATE') return () => console.log('create')
-      if (action === 'VIEW') return () => setAction('EDIT')
-      if (action === 'EDIT') return () => console.log('edit')
-   }
-
-   function create() {
-      setAction('CREATE')
-   }
-
-   const renderListAbstract = (state?.myAbstracts ||
-      state?.isAdded === true ||
-      state?.isRemoved === true) &&
-      !abstractFile && (
-         <AbstractCard
-            abstracts={state.myAbstracts}
-            loading={opening || deleting}
-            error={openError || deleteError}
-            delete={deleteAbstract}
-            open={openAbstract}
-         />
-      )
-
-   const renderCreateAbstract = (
-      <CreateAbstract
-         register={register}
-         watch={watch}
-         loading={creating}
-         error={createError}
-         create={createAbstract}
-      />
-   )
-
-   const renderViewAbstract = (
-      <ViewAbstract
-         register={register}
-         watch={watch}
-         abstract={state?.abstractFile}
-         loading={opening}
-         error={openError}
-         update={updateAbstract}
-      />
-   )
-
-   const renderEditAbstract = (
-      <EditAbstract
-         register={register}
-         watch={watch}
-         abstract={state?.abstractFile}
-         loading={updating}
-         error={updateError}
-         update={updateAbstract}
-      />
-   )
    return (
-      <div style={Styles.dashboard}>
-         <div style={Styles.dashboard.header}>
-            <Title>{getTitle()}</Title>
-            <Button
-               style={{ width: '280px' }}
-               name={getButtonName()}
-               onClick={getAction()}
+      <Switch>
+         <Route exact path='/abstract/new/:abstractId'>
+            <CreateAbstract
+               register={register}
+               watch={watch}
+               loading={creating}
+               error={createError}
+               create={createAbstract}
+               history={history}
             />
-         </div>
-         <div style={Styles.dashboard.content}>
-            {loadError && (
-               <Alert type='ERROR_MESSAGE'>{loadError.message}</Alert>
+         </Route>
+         <Route exact path='/abstracts'>
+            <ListAbstracts
+               history={history}
+               delete={deleteAbstract}
+               loading={loading}
+               deleting={deleting}
+               error={loadError || deleteError}
+               abstracts={state?.myAbstracts}
+            />
+         </Route>
+         <Route path='/abstracts/:abstractId'>
+            {state?.abstractFile && (
+               <ViewAbstract
+                  register={register}
+                  watch={watch}
+                  history={history}
+                  abstract={state?.abstractFile}
+                  loading={opening}
+                  error={openError}
+                  update={updateAbstract}
+                  delete={deleteAbstract}
+               />
             )}
-            {loading && <h1>loading...</h1>}
-            {action === 'LIST' && renderListAbstract}
-            {action === 'CREATE' && renderCreateAbstract}
-            {action === 'VIEW' && renderViewAbstract}
-            {abstractFile && action === 'EDIT' && renderEditAbstract}
-         </div>
-      </div>
+         </Route>
+         <Route path='/abstract/edit/:abstractId'>
+            {state?.abstractFile && (
+               <EditAbstract
+                  register={register}
+                  watch={watch}
+                  history={history}
+                  abstract={state?.abstractFile}
+                  loading={updating}
+                  error={updateError}
+                  update={updateAbstract}
+               />
+            )}
+         </Route>
+         )
+      </Switch>
    )
 }
 

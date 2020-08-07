@@ -8,7 +8,6 @@ function LandingPage(props) {
          display: 'flex',
          flexDirection: 'column',
          maxWidth: '100%',
-         backgroundColor: 'purple',
       },
    }
    return (

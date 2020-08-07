@@ -71,9 +71,8 @@ function Alert(props) {
    return (
       (props.type === 'ERROR_MESSAGE' && renderMessage) ||
       (props.type === 'SUCCESS_MESSAGE' && renderMessage) ||
-      (props.type === 'WARN_MESSAGE' && renderMessage)(
-         props.type === 'SUCCESS_MESSAGE_MODAL' && renderModal
-      )
+      (props.type === 'WARN_MESSAGE' && renderMessage) ||
+      (props.type === 'SUCCESS_MESSAGE_MODAL' && renderModal)
    )
 }
 

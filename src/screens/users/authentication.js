@@ -1,58 +1,25 @@
 import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-
 import { useMutation } from '@apollo/react-hooks'
-
-import gql from 'graphql-tag'
+import { useHistory } from 'react-router-dom'
 
 import { Client } from '../../utils'
 import { UserContext } from '../../store/contexts'
 
 import { Login, Signup } from '../../patterns/forms/index'
+import {
+   LOG_IN,
+   SEND_SIGNUP_CODE,
+   SEND_RESET_CODE,
+   VERIFY,
+   SIGN_UP,
+   RESET,
+} from './gql/mutations'
 
 function Authentication(props) {
    const { dispatch } = useContext(UserContext)
    const { watch, register } = useForm()
-
-   const SEND_CODE_SIGNUP = gql`
-      mutation sendCode($mobile: String!) {
-         sendCode(sendCodeInput: { mobile: $mobile, type: SIGN_UP })
-      }
-   `
-
-   const SEND_CODE_RESET = gql`
-      mutation sendCode($mobile: String!) {
-         sendCode(sendCodeInput: { mobile: $mobile, type: RESET_PASSWORD })
-      }
-   `
-
-   const VERIFY_CODE = gql`
-      mutation verifyCode($code: String!, $mobile: String!) {
-         verifyCode(verifyCodeInput: { code: $code, mobile: $mobile })
-      }
-   `
-
-   const SIGN_UP = gql`
-      mutation signUp($mobile: String!, $password: String!, $code: String!) {
-         signUp(
-            signUpInput: { mobile: $mobile, password: $password, code: $code }
-         ) {
-            _id
-            mobile
-            password
-         }
-      }
-   `
-
-   const LOG_IN = gql`
-      mutation login($mobile: String!, $password: String!) {
-         login(loginInput: { mobile: $mobile, password: $password }) {
-            _id
-            token
-            tokenExpiration
-         }
-      }
-   `
+   const history = useHistory()
 
    const [login, { loading: logging, error: loginError }] = useMutation(
       LOG_IN,
@@ -70,21 +37,21 @@ function Authentication(props) {
    )
 
    const [
-      sendCodeSignup,
-      { loading: signupCodeSending, error: signupSendCodeError },
-   ] = useMutation(SEND_CODE_SIGNUP, {
+      sendSignupCode,
+      { loading: sendingSignupCode, error: sendSignupCodeError },
+   ] = useMutation(SEND_SIGNUP_CODE, {
       errorPolicy: 'all',
    })
 
    const [
-      sendCodeReset,
-      { loading: resetCodeSending, error: resetSendCodeError },
-   ] = useMutation(SEND_CODE_RESET, {
+      sendResetCode,
+      { loading: sendingResetCode, error: sendResetCodeError },
+   ] = useMutation(SEND_RESET_CODE, {
       errorPolicy: 'all',
    })
 
    const [verify, { loading: verifying, error: verifyError }] = useMutation(
-      VERIFY_CODE,
+      VERIFY,
       {
          errorPolicy: 'all',
       }
@@ -97,24 +64,39 @@ function Authentication(props) {
       }
    )
 
+   const [reset, { loading: resetting, error: resetError }] = useMutation(
+      RESET,
+      {
+         errorPolicy: 'all',
+      }
+   )
+
    const renderSignupForm = (
       <Signup
          register={register}
          watch={watch}
-         resetCodeSending={resetCodeSending}
-         sendCodeReset={sendCodeReset}
-         signupCodeSending={signupCodeSending}
-         error={signupSendCodeError || resetSendCodeError}
-         sendCodeSignup={sendCodeSignup}
-         verifying={verifying}
-         verifyError={verifyError}
-         verify={verify}
-         signing={signing}
-         signupError={signupError}
-         signup={signup}
-         logging={logging}
-         loginError={loginError}
+         error={
+            loginError ||
+            signupError ||
+            resetError ||
+            verifyError ||
+            sendSignupCodeError ||
+            sendResetCodeError
+         }
+         loading={
+            logging ||
+            signing ||
+            resetting ||
+            verifying ||
+            sendingSignupCode ||
+            sendingResetCode
+         }
          login={login}
+         sendSignupCode={sendSignupCode}
+         sendResetCode={sendResetCode}
+         verify={verify}
+         signup={signup}
+         reset={reset}
          type={props.type === 'SIGN_UP' ? 'SIGN_UP' : 'RESET'}
       />
    )
@@ -123,8 +105,8 @@ function Authentication(props) {
       <Login
          register={register}
          watch={watch}
-         logging={logging}
-         loginError={loginError}
+         loading={logging}
+         error={loginError}
          login={login}
       />
    )

@@ -24,8 +24,9 @@ function Statistics(props) {
       <div style={styles.statistics}>
          <Card
             style={{
-               maxWidth: '100px',
-               height: '80px',
+               maxWidth: '68px',
+               height: '60px',
+               justifyContent: 'center',
             }}
          >
             <Title
@@ -39,8 +40,9 @@ function Statistics(props) {
          </Card>
          <Card
             style={{
-               maxWidth: '100px',
-               height: '80px',
+               maxWidth: '68px',
+               height: '60px',
+               justifyContent: 'center',
             }}
          >
             <Title
@@ -54,8 +56,9 @@ function Statistics(props) {
          </Card>
          <Card
             style={{
-               maxWidth: '100px',
-               height: '80px',
+               maxWidth: '68px',
+               height: '60px',
+               justifyContent: 'center',
             }}
          >
             <Title

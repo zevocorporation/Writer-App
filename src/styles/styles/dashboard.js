@@ -1,13 +1,12 @@
 const Dashboard = {
-   backgroundColor: 'green',
    width: '100%',
 
    header: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      backgroundColor: 'grey',
-      margin: '16px',
+      padding: '16px 32px 16px 32px',
+      backgroundColor: 'white',
    },
 
    content: {
@@ -15,7 +14,6 @@ const Dashboard = {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'yellow',
       margin: '16px',
    },
 }

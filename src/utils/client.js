@@ -13,8 +13,6 @@ const link = createHttpLink({
    },
 })
 
-console.log(JSON.parse(localStorage.getItem('token'))?.token)
-
 const Client = new ApolloClient({
    cache,
    link,

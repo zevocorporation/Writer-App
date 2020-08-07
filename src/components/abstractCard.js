@@ -1,40 +1,45 @@
 import React from 'react'
-
 import { Card, Text, Icon } from '.'
 import { DeleteIcon } from '../assets/assets'
+import { useRouteMatch } from 'react-router-dom'
+import { Colors } from '../styles/base/index'
 
 function AbstractCard(props) {
-   async function deleteAbstract(e, _id) {
-      e.preventDefault()
-      props.delete({ variables: { id: _id } })
-   }
+   const { path } = useRouteMatch()
 
-   async function openDoc(e, _id) {
+   async function open(e, id) {
       e.preventDefault()
-      props.open({ variables: { id: _id } })
+      props.history.push(
+         `${path}/node=${Math.floor(Math.random() * 10)}?id=${id}`
+      )
+   }
+   async function deleteAbstract(id) {
+      const res = await props.delete({ variables: { id: id } })
+      if (res.data?.deleteAbstract) {
+         props.history.push('/abstracts')
+      }
    }
 
    const styles = {
       card: {
          cursor: 'pointer',
+         padding: '32px',
          margin: '16px 0px',
-         boxShadow: '4px 1px 4px rgba(0, 0, 0, 0.08)',
          display: 'flex',
-         flexDirection: 'column',
+         flexDirection: 'row',
          width: '95%',
-         alignItems: 'flex-start',
+         alignItems: 'center',
          justifyContent: 'space-around',
 
          content: {
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'space-between',
-            backgroundColor: 'cyan',
-            width: '100%',
+            maxWidth: '70%',
          },
 
          header: {
             display: 'flex',
-            backgroundColor: 'grey',
             minHeight: '40px',
             width: '100%',
             alignItems: 'center',
@@ -45,14 +50,11 @@ function AbstractCard(props) {
             flexDirection: 'column',
             alignItems: 'flex-start',
             marginRight: '80px',
-            backgroundColor: 'purple',
          },
          info: {
-            backgroundColor: 'pink',
             display: 'flex',
          },
          control: {
-            backgroundColor: 'red',
             width: '30%',
             justifyContent: 'space-around',
             display: 'flex',
@@ -60,45 +62,63 @@ function AbstractCard(props) {
       },
    }
 
-   const renderCard = props.abstracts?.map((abstract) => (
-      <Card
-         onClick={(e) => openDoc(e, abstract._id)}
-         key={abstract._id}
-         style={styles.card}
-      >
-         <div style={styles.card.header}>
-            <Text type='textBold' style={{ fontSize: '18px' }}>
-               {abstract.title}
-            </Text>
-         </div>
-         <div style={styles.card.content}>
+   const renderCard = (
+      <Card key={props.key} style={styles.card}>
+         <div
+            style={styles.card.content}
+            onClick={(e) => open(e, props.abstract._id)}
+         >
+            <div style={styles.card.header}>
+               <Text
+                  type='textBold'
+                  style={{
+                     fontSize: '18px',
+                     color: Colors.accent.tertiary,
+                     marginTop: '-32px',
+                  }}
+               >
+                  {props.abstract.title}
+               </Text>
+            </div>
             <div style={styles.card.info}>
                <div style={styles.card.block}>
-                  <Text style={{ fontSize: '16px' }}>Subject</Text>
-                  <Text style={{ fontSize: '14px' }}>{abstract.subject}</Text>
+                  <Text style={{ fontSize: '14px', marginBottom: '8px' }}>
+                     Subject
+                  </Text>
+                  <Text type='label' style={{ fontSize: '14px' }}>
+                     {props.abstract.subject}
+                  </Text>
                </div>
                <div style={styles.card.block}>
-                  <Text style={{ fontSize: '16px' }}>Created</Text>
-                  <Text style={{ fontSize: '14px' }}>{abstract.createdAt}</Text>
-               </div>
-               <div style={styles.card.block}>
-                  <Text style={{ fontSize: '16px' }}>Last edited</Text>
-                  <Text style={{ fontSize: '14px' }}>{abstract.updatedAt}</Text>
-               </div>
-            </div>
+                  <Text style={{ fontSize: '14px', marginBottom: '8px' }}>
+                     Created at
+                  </Text>
 
-            <div style={styles.card.control}>
-               <Icon
-                  onClick={(e) => deleteAbstract(e, abstract._id)}
-                  style={{ width: '32px' }}
-                  icon={DeleteIcon}
-               />
+                  <Text type='label' style={{ fontSize: '14px' }}>
+                     {props.abstract.createdAt}
+                  </Text>
+               </div>
+               <div style={styles.card.block}>
+                  <Text style={{ fontSize: '14px', marginBottom: '8px' }}>
+                     Last edited
+                  </Text>
+                  <Text type='label' style={{ fontSize: '14px' }}>
+                     {props.abstract.updatedAt}
+                  </Text>
+               </div>
             </div>
          </div>
+         <div style={styles.card.control}>
+            <Icon
+               onClick={() => deleteAbstract(props.abstract._id)}
+               style={{ width: '32px' }}
+               icon={DeleteIcon}
+            />
+         </div>
       </Card>
-   ))
+   )
 
-   return props.abstracts ? renderCard : null
+   return renderCard
 }
 
 export default AbstractCard

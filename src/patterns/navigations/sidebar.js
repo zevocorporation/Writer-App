@@ -1,5 +1,4 @@
 import React from 'react'
-import {} from 'react-router-dom'
 import { Link } from '../../components/index'
 import { Colors } from '../../styles/base'
 
@@ -12,13 +11,13 @@ function Sidebar(props) {
          left: 0,
          padding: '16px',
          width: '12vw',
-         height: '87vh',
+         height: '87.5vh',
       },
    }
    return (
       <div style={styles.sidebar}>
          <Link
-            to='/list'
+            to='/abstracts'
             style={{
                color: Colors.accent.secondary,
                fontSize: '2.5vh',

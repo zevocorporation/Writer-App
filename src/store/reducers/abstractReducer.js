@@ -14,16 +14,25 @@ const AbstractReducer = (state, action) => {
       case 'OPEN_ABSTRACT_FILE':
          return { ...state, abstractFile: payload }
       case 'UPDATE_ABSTRACT':
+         const newUpdateList = state?.myAbstracts.filter((abstract) => {
+            return abstract._id !== payload._id
+         })
+         newUpdateList.push(payload)
          return {
             ...state,
-            isLoggedIn: false,
+            myAbstracts: newUpdateList.reverse(),
+            abstractFile: payload,
+            isUpdated: true,
          }
       case 'REMOVE_ABSTRACT':
-         const myAbstracts = state?.myAbstracts
-         const data = myAbstracts.filter((myAbstract) => {
-            return myAbstract._id !== payload._id
+         const newRemoveList = state?.myAbstracts.filter((abstract) => {
+            return abstract._id !== payload._id
          })
-         return { ...state, myAbstracts: data, isRemoved: true }
+         return {
+            ...state,
+            myAbstracts: newRemoveList.reverse(),
+            isRemoved: true,
+         }
    }
 }
 

@@ -30,6 +30,7 @@ function Button(props) {
          id={props.id}
          onClick={props.onClick}
          style={styles.button}
+         disabled={props.disabled}
       >
          {props.name}
          {props.loading && (

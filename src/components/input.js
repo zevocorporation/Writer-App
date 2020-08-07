@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button } from '.'
+import { Button, Text } from '.'
 
 import { Colors } from '../styles/base'
 import { SuccessIcon, WarnIcon, ErrorIcon } from '../assets/assets'
@@ -8,7 +8,7 @@ import { SuccessIcon, WarnIcon, ErrorIcon } from '../assets/assets'
 function Input(props) {
    const styles = {
       container: {
-         backgroundColor: Colors.primaryLight,
+         backgroundColor: Colors.accent.secondary,
          display: 'flex',
          justifyContent: 'space-around',
          height: '46px',
@@ -18,8 +18,19 @@ function Input(props) {
          margin: '16px 0px',
          ...props.style,
       },
+      textAreaContainer: {
+         backgroundColor: Colors.accent.secondary,
+         display: 'flex',
+         flexDirection: 'column',
+         alignContent: 'space-between',
+         borderRadius: '8px',
+         maxWidth: '100%',
+         margin: '16px 0px',
+         ...props.style,
+      },
       input: {
-         backgroundColor: Colors.primaryLight,
+         backgroundColor: Colors.accent.secondary,
+         color: Colors.accent.label,
          border: 'none',
          borderRadius: '8px',
          fontFamily: 'Quicksand',
@@ -30,6 +41,19 @@ function Input(props) {
          width: '100%',
          padding: '0px 16px',
          height: '100%',
+         ...props.inputStyle,
+      },
+      textAreaInput: {
+         backgroundColor: Colors.accent.secondary,
+         color: Colors.accent.label,
+         border: 'none',
+         borderRadius: '8px',
+         fontFamily: 'Quicksand',
+         fontSize: '14px',
+         outline: 'none',
+         padding: '0px 16px',
+         height: '200px',
+         width: '95%',
          ...props.inputStyle,
       },
    }
@@ -100,12 +124,23 @@ function Input(props) {
          />
       </div>
    )
+
+   function wordCount(text) {
+      var totalSoFar = 0
+      for (var i = 1; i < text.length; i++) {
+         if (text[i] === ' ') {
+            totalSoFar++
+         }
+      }
+      return props.wordLimit - totalSoFar
+   }
+
    const renderTextArea = (
-      <div style={styles.container}>
+      <div style={styles.textAreaContainer}>
          <textarea
             name={props.name}
             ref={props.register}
-            style={styles.input}
+            style={styles.textAreaInput}
             defaultValue={props.defaultValue}
             placeholder={props.placeholder}
             type={props.inputType}
@@ -116,10 +151,49 @@ function Input(props) {
             maxLength={props.maxLength}
             onChange={props.onChange}
             value={props.value}
+            disabled={props.disabled}
          >
             {props.children}
          </textarea>
-         {props.icon && renderIcon}
+         <div
+            style={{
+               display: 'flex',
+               alignItems: 'center;',
+               margin: '0px 16px',
+            }}
+         >
+            {props.text && wordCount(props.text) > 0 && (
+               <img
+                  src={SuccessIcon}
+                  style={{
+                     maxHeight: '22px',
+                     marginRight: '16px',
+                  }}
+                  alt='icon'
+               />
+            )}
+            {props.text && wordCount(props.text) <= 0 && (
+               <img
+                  src={ErrorIcon}
+                  style={{
+                     maxHeight: '22px',
+                     marginRight: '16px',
+                  }}
+                  alt='icon'
+               />
+            )}
+            <Text type='label'>
+               {props.text &&
+                  wordCount(props.text) > 0 &&
+                  wordCount(props.text) +
+                     ' words remaining out of ' +
+                     props.wordLimit +
+                     ' words'}
+               {props.text &&
+                  wordCount(props.text) <= 0 &&
+                  'words out of limit. Please reduce the words'}
+            </Text>
+         </div>
       </div>
    )
    return (
