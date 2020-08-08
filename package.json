@@ -1,7 +1,6 @@
 {
    "name": "writer-space",
    "version": "0.1.0",
-   "homepage": "http://zevocorporation.github.io/zevocorporation/Writer-App.git",
    "private": true,
    "dependencies": {
       "@apollo/client": "^3.1.0",

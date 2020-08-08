@@ -4,7 +4,7 @@ import { createHttpLink } from 'apollo-link-http'
 
 const cache = new InMemoryCache()
 const link = createHttpLink({
-   uri: 'https://wonderful-skunk-28.telebit.io/graphql',
+   uri: 'http://15.206.70.204:4000/graphql',
    credentials: 'include',
    headers: {
       authorization: `Bearer ${
