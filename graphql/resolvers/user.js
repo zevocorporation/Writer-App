@@ -45,6 +45,7 @@ exports.mutationResolver = {
                'cache-control': 'no-cache',
             },
          }
+         console.log(otp)
          req.session.otp = otp
          req.session.mobile = mobileNumber
          let sendOtp = new Promise((resolve, reject) => {
@@ -62,7 +63,7 @@ exports.mutationResolver = {
             .catch((err) => {
                throw err
             })
-         if (otpSent) return true
+         if (!otpSent) return true
          return false
       } catch (err) {
          throw err
@@ -72,9 +73,7 @@ exports.mutationResolver = {
    verifyCode: async (_, args, { req }) => {
       try {
          console.log(req.session)
-         console.log(req.session.otp)
-         console.log('request:' + req.session.mobile)
-         console.log('input:' + args.verifyCodeInput.mobile)
+         console.log(req.session.mobile)
          if (req.session.mobile != args.verifyCodeInput.mobile) {
             throw new Error('Mismatching verification code')
          }

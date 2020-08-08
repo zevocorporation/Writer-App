@@ -11,7 +11,6 @@ const isAuth = require('./middleware/is-auth')
 require('dotenv').config()
 
 const app = express()
-app.use(cors())
 
 const SES_EXP = +process.env.SESSION_EXPIRY
 
@@ -21,17 +20,27 @@ const store = new MongoDBStore({
 })
 
 app.use(
+   cors({
+      origin: 'http://15.206.70.204:4000/graphql',
+      credentials: true,
+   })
+)
+
+app.use(
    session({
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: SES_EXP },
+      cookie: {
+         httpOnly: false,
+         secure: false,
+         maxAge: SES_EXP,
+      },
       store: store,
    })
 )
 
 app.use(isAuth)
-
 const server = new ApolloServer({
    typeDefs,
    resolvers,
@@ -43,7 +52,8 @@ const server = new ApolloServer({
       req: integrationContext.req,
    }),
 })
-server.applyMiddleware({ app })
+
+server.applyMiddleware({ app, path: '/', cors: false })
 
 mongoose
    .connect(
