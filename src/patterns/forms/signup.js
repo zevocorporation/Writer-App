@@ -90,6 +90,7 @@ function Signup(props) {
             props.login({
                variables: { mobile: mobile, password: password },
             })
+            props.history.push('/')
          }
       }
    }
@@ -118,6 +119,7 @@ function Signup(props) {
             props.login({
                variables: { mobile: mobile, password: password },
             })
+            props.history.push('/')
          }
       }
    }
