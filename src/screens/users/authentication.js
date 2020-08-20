@@ -15,7 +15,6 @@ import {
    SIGN_UP,
    RESET,
 } from './gql/mutations'
-import App from '../../App'
 
 function Authentication(props) {
    const { dispatch } = useContext(UserContext)

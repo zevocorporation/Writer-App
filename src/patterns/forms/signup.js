@@ -299,7 +299,7 @@ function Signup(props) {
                              e,
                              mobile,
                              code,
-                             props.watch('newPassword'),
+                             props.watch('password'),
                              props.watch('confirmPassword')
                           )
                }
