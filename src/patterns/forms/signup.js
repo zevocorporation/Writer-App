@@ -86,6 +86,11 @@ function Signup(props) {
             variables: { mobile: mobile, password: password, code: code },
          })
          if (res?.errors) setError(res.errors[0].message)
+         if (res.data?.signUp) {
+            props.login({
+               variables: { mobile: mobile, password: password },
+            })
+         }
       }
    }
 
@@ -109,6 +114,11 @@ function Signup(props) {
             variables: { mobile: mobile, newPassword: password, code: code },
          })
          if (res?.errors) setError(res.errors[0].message)
+         if (res.data?.resetPassword) {
+            props.login({
+               variables: { mobile: mobile, password: password },
+            })
+         }
       }
    }
    const renderSignupFooter = (
@@ -274,22 +284,24 @@ function Signup(props) {
             <Button
                name={props.type === 'SIGN_UP' ? 'Signup' : 'Change password'}
                loading={props.loading}
-               onClick={(e) =>
+               onClick={
                   props.type === 'SIGN_UP'
-                     ? signup(
-                          e,
-                          mobile,
-                          code,
-                          props.watch('password'),
-                          props.watch('confirmPassword')
-                       )
-                     : reset(
-                          e,
-                          mobile,
-                          code,
-                          props.watch('newPassword'),
-                          props.watch('confirmPassword')
-                       )
+                     ? (e) =>
+                          signup(
+                             e,
+                             mobile,
+                             code,
+                             props.watch('password'),
+                             props.watch('confirmPassword')
+                          )
+                     : (e) =>
+                          reset(
+                             e,
+                             mobile,
+                             code,
+                             props.watch('newPassword'),
+                             props.watch('confirmPassword')
+                          )
                }
             />
          </div>

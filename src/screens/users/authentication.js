@@ -64,9 +64,6 @@ function Authentication(props) {
    const [signup, { loading: signing, error: signupError }] = useMutation(
       SIGN_UP,
       {
-         onCompleted({ signUp }) {
-            if (signUp) login()
-         },
          errorPolicy: 'all',
       }
    )
@@ -74,9 +71,6 @@ function Authentication(props) {
    const [reset, { loading: resetting, error: resetError }] = useMutation(
       RESET,
       {
-         onCompleted({ resetPassword }) {
-            if (resetPassword) login()
-         },
          errorPolicy: 'all',
       }
    )
