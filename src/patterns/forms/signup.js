@@ -269,16 +269,18 @@ function Signup(props) {
             )}
             {error && <Alert type='ERROR_MESSAGE'>{error}</Alert>}
             <Button
-               name='Signup'
+               name={props.type === 'SIGN_UP' ? 'Signup' : 'Change password'}
                loading={props.loading}
                onClick={(e) =>
-                  signup(
-                     e,
-                     mobile,
-                     code,
-                     props.watch('password'),
-                     props.watch('confirmPassword')
-                  )
+                  props.type === 'SIGN_UP'
+                     ? signup(
+                          e,
+                          mobile,
+                          code,
+                          props.watch('password'),
+                          props.watch('confirmPassword')
+                       )
+                     : signup(e, mobile, code, props.watch('newPassword'))
                }
             />
          </div>
