@@ -82,30 +82,33 @@ function Signup(props) {
          setWarning({ password: validatePassword.message })
       }
       if (validatePassword?.isValid && validateConfirmPassword?.isValid) {
-         if (props.type === 'SIGN_UP') {
-            const res = await props.signup({
-               variables: { mobile: mobile, password: password, code: code },
-            })
-            if (res?.errors) setError(res.errors[0].message)
+         const res = await props.signup({
+            variables: { mobile: mobile, password: password, code: code },
+         })
+         if (res?.errors) setError(res.errors[0].message)
+      }
+   }
 
-            if (res.data?.signUp) {
-               props.login({
-                  variables: { mobile: mobile, password: password },
-               })
-            }
-         }
-         if (props.type === 'RESET') {
-            const res = await props.reset({
-               variables: { mobile: mobile, newPassword: password, code: code },
-            })
-            if (res?.errors) setError(res.errors[0].message)
+   async function reset(e, mobile, code, password, confirmPassword) {
+      e.preventDefault()
+      setError()
 
-            if (res.data?.resetPassword) {
-               props.login({
-                  variables: { mobile: mobile, password: password },
-               })
-            }
-         }
+      const validatePassword = await Validator.password(props.watch(password))
+      const validateConfirmPassword = await Validator.confirmPassword(
+         password,
+         confirmPassword
+      )
+      if (validateConfirmPassword.message) {
+         setWarning({ confirmPassword: validateConfirmPassword.message })
+      }
+      if (validatePassword.message) {
+         setWarning({ password: validatePassword.message })
+      }
+      if (validatePassword?.isValid && validateConfirmPassword?.isValid) {
+         const res = await props.reset({
+            variables: { mobile: mobile, newPassword: password, code: code },
+         })
+         if (res?.errors) setError(res.errors[0].message)
       }
    }
    const renderSignupFooter = (
@@ -280,7 +283,13 @@ function Signup(props) {
                           props.watch('password'),
                           props.watch('confirmPassword')
                        )
-                     : signup(e, mobile, code, props.watch('newPassword'))
+                     : reset(
+                          e,
+                          mobile,
+                          code,
+                          props.watch('newPassword'),
+                          props.watch('confirmPassword')
+                       )
                }
             />
          </div>
