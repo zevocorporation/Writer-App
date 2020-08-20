@@ -10,7 +10,10 @@ const AbstractReducer = (state, action) => {
          }
       case 'ADD_ABSTRACT':
          if (state?.myAbstracts) state.myAbstracts.push(payload)
-         return { ...state, isAdded: true }
+         return {
+            ...state,
+            isAdded: true,
+         }
       case 'OPEN_ABSTRACT_FILE':
          return { ...state, abstractFile: payload }
       case 'UPDATE_ABSTRACT':
@@ -30,7 +33,7 @@ const AbstractReducer = (state, action) => {
          })
          return {
             ...state,
-            myAbstracts: newRemoveList.reverse(),
+            myAbstracts: newRemoveList,
             isRemoved: true,
          }
    }

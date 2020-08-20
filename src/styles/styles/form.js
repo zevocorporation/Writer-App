@@ -43,7 +43,7 @@ const Form = {
       justifyContent: 'space-around',
       alignItems: 'space-around',
       width: '100%',
-      margin: '0px 0px 32px 0px',
+      marginBottom: '16px',
    },
 
    textAreaInput: {

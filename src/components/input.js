@@ -8,37 +8,39 @@ import { SuccessIcon, WarnIcon, ErrorIcon } from '../assets/assets'
 function Input(props) {
    const styles = {
       container: {
-         backgroundColor: Colors.accent.secondary,
          display: 'flex',
-         justifyContent: 'space-around',
+         justifyContent: 'space-between',
          height: '46px',
          alignItems: 'center',
          borderRadius: '8px',
          maxWidth: '100%',
+         position: 'relative',
          margin: '16px 0px',
          ...props.style,
       },
       textAreaContainer: {
+         marginTop: '16px',
+         marginBottom: '16px',
          backgroundColor: Colors.accent.secondary,
          display: 'flex',
          flexDirection: 'column',
          alignContent: 'space-between',
          borderRadius: '8px',
-         maxWidth: '100%',
-         margin: '16px 0px',
          ...props.style,
       },
       input: {
          backgroundColor: Colors.accent.secondary,
          color: Colors.accent.label,
          border: 'none',
-         borderRadius: '8px',
+         borderRadius:
+            props.type === 'inline-button' ? '8px 0px 0px 8px' : '8px',
          fontFamily: 'Quicksand',
          marginTop: '16px',
          marginBottom: '16px',
          fontSize: '14px',
          outline: 'none',
          width: '100%',
+         position: 'relative',
          padding: '0px 16px',
          height: '100%',
          ...props.inputStyle,
@@ -51,9 +53,10 @@ function Input(props) {
          fontFamily: 'Quicksand',
          fontSize: '14px',
          outline: 'none',
-         padding: '0px 16px',
          height: '200px',
-         width: '95%',
+         width: 'auto',
+         padding: '16px',
+         marginTop: '-16px',
          ...props.inputStyle,
       },
    }
@@ -67,6 +70,8 @@ function Input(props) {
          style={{
             maxHeight: '22px',
             marginRight: '16px',
+            position: 'absolute',
+            right: props.type === 'inline-button' ? 160 : 0,
          }}
          alt='icon'
       />
@@ -110,14 +115,11 @@ function Input(props) {
          />
          {props.icon && renderIcon}
          <Button
-            id={props.btnId}
             style={{
-               fontSize: '14px',
-               minWidth: props.loading ? '140px' : '110px',
-               height: '46px',
-               alignItems: props.loading ? 'none' : 'center',
+               minWidth: '50%',
                borderRadius: '0px 8px 8px 0px',
             }}
+            id={props.btnId}
             loading={props.loading}
             name={props.buttonName}
             onClick={props.btnOnClick}
@@ -126,13 +128,19 @@ function Input(props) {
    )
 
    function wordCount(text) {
-      var totalSoFar = 0
-      for (var i = 1; i < text.length; i++) {
-         if (text[i] === ' ') {
-            totalSoFar++
-         }
-      }
-      return props.wordLimit - totalSoFar
+      const result = text
+         .split('.')
+         .filter((sentence) => sentence !== ' ')
+         .map(
+            (sentence) =>
+               sentence.split(' ').filter((word) => word !== '').length
+         )
+
+      let count = 0
+      result.forEach((item) => {
+         count = count + item
+      })
+      return props.wordLimit - count
    }
 
    const renderTextArea = (
@@ -162,7 +170,7 @@ function Input(props) {
                margin: '0px 16px',
             }}
          >
-            {props.text && wordCount(props.text) > 0 && (
+            {props.text && wordCount(props.text) >= 0 && (
                <img
                   src={SuccessIcon}
                   style={{
@@ -172,7 +180,7 @@ function Input(props) {
                   alt='icon'
                />
             )}
-            {props.text && wordCount(props.text) <= 0 && (
+            {props.text && wordCount(props.text) < 0 && (
                <img
                   src={ErrorIcon}
                   style={{
@@ -190,7 +198,7 @@ function Input(props) {
                      props.wordLimit +
                      ' words'}
                {props.text &&
-                  wordCount(props.text) <= 0 &&
+                  wordCount(props.text) < 0 &&
                   'words out of limit. Please reduce the words'}
             </Text>
          </div>

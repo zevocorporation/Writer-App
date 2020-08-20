@@ -15,6 +15,7 @@ import {
    SIGN_UP,
    RESET,
 } from './gql/mutations'
+import App from '../../App'
 
 function Authentication(props) {
    const { dispatch } = useContext(UserContext)
@@ -31,6 +32,9 @@ function Authentication(props) {
                type: 'LOG_IN',
                payload: login,
             })
+            if (login) {
+               window.location.reload()
+            }
          },
          errorPolicy: 'all',
       }
@@ -73,6 +77,7 @@ function Authentication(props) {
 
    const renderSignupForm = (
       <Signup
+         history={history}
          register={register}
          watch={watch}
          error={
@@ -103,6 +108,7 @@ function Authentication(props) {
 
    const renderLoginForm = (
       <Login
+         history={history}
          register={register}
          watch={watch}
          loading={logging}

@@ -1,4 +1,4 @@
-import { Colors } from '.'
+import { Colors } from './index'
 
 export default function Typography(props, category) {
    const styles = {

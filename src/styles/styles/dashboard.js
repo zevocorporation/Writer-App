@@ -7,6 +7,7 @@ const Dashboard = {
       justifyContent: 'space-between',
       padding: '16px 32px 16px 32px',
       backgroundColor: 'white',
+      margin: '16px',
    },
 
    content: {
@@ -14,6 +15,7 @@ const Dashboard = {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
+      padding: '16px',
       margin: '16px',
    },
 }

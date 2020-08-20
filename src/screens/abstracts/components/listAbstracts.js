@@ -3,9 +3,9 @@ import { AbstractCard, Button, Title, Alert } from '../../../components/index'
 import Styles from '../../../styles/styles/index'
 
 function ListAbstracts(props) {
-   const renderAbstracts = props.abstracts?.map((abstract, index) => (
+   const renderAbstracts = props.abstracts?.map((abstract) => (
       <AbstractCard
-         key={index}
+         key={abstract._id}
          open={props.open}
          delete={props.delete}
          abstract={abstract}
@@ -13,17 +13,13 @@ function ListAbstracts(props) {
       />
    ))
    function create() {
-      props.history.push(`abstract/new/untitled`)
+      props.history.push(`abstracts/new/untitled`)
    }
    return (
       <div style={Styles.dashboard}>
          <div style={Styles.dashboard.header}>
-            <Title>Manage abstracts</Title>
-            <Button
-               style={{ width: '280px' }}
-               name='New abstract'
-               onClick={() => create()}
-            />
+            <Title>My abstracts</Title>
+            <Button name='Create' onClick={() => create()} />
          </div>
          <div style={Styles.dashboard.content}>
             {props.error && (

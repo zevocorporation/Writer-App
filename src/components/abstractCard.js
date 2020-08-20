@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Card, Text, Icon } from '.'
 import { DeleteIcon } from '../assets/assets'
 import { useRouteMatch } from 'react-router-dom'
 import { Colors } from '../styles/base/index'
+import { DeviceContext } from '../store/contexts/index'
 
 function AbstractCard(props) {
    const { path } = useRouteMatch()
+   const device = useContext(DeviceContext)
 
    async function open(e, id) {
       e.preventDefault()
@@ -23,47 +25,78 @@ function AbstractCard(props) {
    const styles = {
       card: {
          cursor: 'pointer',
-         padding: '32px',
-         margin: '16px 0px',
          display: 'flex',
-         flexDirection: 'row',
-         width: '95%',
-         alignItems: 'center',
+         flexDirection: device === 'mobile' ? 'column' : 'row',
+         width: '100%',
+         alignItems: device === 'mobile' ? 'flex-start' : 'center',
          justifyContent: 'space-around',
+         marginBottom: '16px',
 
          content: {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            maxWidth: '70%',
+            width: '100%',
          },
 
          header: {
             display: 'flex',
-            minHeight: '40px',
             width: '100%',
             alignItems: 'center',
+            justifyContent: 'space-between',
+            textAlign: 'left',
+            marginBottom: '16px',
          },
 
          block: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            marginRight: '80px',
+            margin: '8px 22px 0px 0px',
          },
          info: {
             display: 'flex',
+            flexDirection: device === 'mobile' ? 'column' : 'row',
          },
          control: {
             width: '30%',
             justifyContent: 'space-around',
             display: 'flex',
+            backgroundColor: 'white',
          },
       },
    }
 
+   const renderIcon = (
+      <div style={styles.card.control}>
+         <Icon
+            onClick={() => deleteAbstract(props.abstract._id)}
+            style={{ width: '28px', margin: '16px' }}
+            icon={DeleteIcon}
+         />
+      </div>
+   )
+
+   const renderMutationTimes = (
+      <div style={{ display: 'flex' }}>
+         <div style={styles.card.block}>
+            <Text style={{ fontSize: '14px' }}>Created at</Text>
+
+            <Text type='label' style={{ fontSize: '14px', textAlign: 'left' }}>
+               {props.abstract.createdAt}
+            </Text>
+         </div>
+         <div style={styles.card.block}>
+            <Text style={{ fontSize: '14px' }}>Last edited</Text>
+            <Text type='label' style={{ fontSize: '14px', textAlign: 'left' }}>
+               {props.abstract.updatedAt}
+            </Text>
+         </div>
+      </div>
+   )
+
    const renderCard = (
-      <Card key={props.key} style={styles.card}>
+      <Card style={styles.card}>
          <div
             style={styles.card.content}
             onClick={(e) => open(e, props.abstract._id)}
@@ -74,47 +107,26 @@ function AbstractCard(props) {
                   style={{
                      fontSize: '18px',
                      color: Colors.accent.tertiary,
-                     marginTop: '-32px',
                   }}
                >
                   {props.abstract.title}
                </Text>
+               {device === 'mobile' && renderIcon}
             </div>
             <div style={styles.card.info}>
                <div style={styles.card.block}>
-                  <Text style={{ fontSize: '14px', marginBottom: '8px' }}>
-                     Subject
-                  </Text>
-                  <Text type='label' style={{ fontSize: '14px' }}>
+                  <Text style={{ fontSize: '14px' }}>Subject</Text>
+                  <Text
+                     type='label'
+                     style={{ fontSize: '14px', textAlign: 'left' }}
+                  >
                      {props.abstract.subject}
                   </Text>
                </div>
-               <div style={styles.card.block}>
-                  <Text style={{ fontSize: '14px', marginBottom: '8px' }}>
-                     Created at
-                  </Text>
-
-                  <Text type='label' style={{ fontSize: '14px' }}>
-                     {props.abstract.createdAt}
-                  </Text>
-               </div>
-               <div style={styles.card.block}>
-                  <Text style={{ fontSize: '14px', marginBottom: '8px' }}>
-                     Last edited
-                  </Text>
-                  <Text type='label' style={{ fontSize: '14px' }}>
-                     {props.abstract.updatedAt}
-                  </Text>
-               </div>
+               {renderMutationTimes}
             </div>
          </div>
-         <div style={styles.card.control}>
-            <Icon
-               onClick={() => deleteAbstract(props.abstract._id)}
-               style={{ width: '32px' }}
-               icon={DeleteIcon}
-            />
-         </div>
+         {device === 'desktop' && renderIcon}
       </Card>
    )
 

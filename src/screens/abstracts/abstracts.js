@@ -1,6 +1,12 @@
 import React, { useReducer } from 'react'
 import { useForm } from 'react-hook-form'
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom'
+import {
+   Switch,
+   Route,
+   useLocation,
+   useHistory,
+   useRouteMatch,
+} from 'react-router-dom'
 
 import {
    ListAbstracts,
@@ -24,6 +30,17 @@ function Abstracts(props) {
    const { watch, register } = useForm()
    const [state, dispatch] = useReducer(AbstractReducer)
    const history = useHistory()
+   const { path } = useRouteMatch()
+
+   React.useEffect(() => {
+      if (
+         (state?.myAbstracts?.length === 0 ||
+            state?.myAbstracts?.length === undefined) &&
+         (state?.isAdded || state?.isUpdated || state?.isRemoved)
+      ) {
+         window.location.reload()
+      }
+   })
 
    function useRouteQuery() {
       return new URLSearchParams(useLocation().search)
@@ -53,10 +70,10 @@ function Abstracts(props) {
          })
       },
    })
-
    const { loading: opening, error: openError } = useQuery(OPEN_ABSTRACT_FILE, {
       errorPolicy: 'all',
       variables: { id: routeQuery.get('id') },
+
       onCompleted({ getUserAbstractDocument }) {
          dispatch({
             type: 'OPEN_ABSTRACT_FILE',
@@ -91,9 +108,37 @@ function Abstracts(props) {
       errorPolicy: 'all',
    })
 
+   const renderAbstractRoutes = (
+      <Switch>
+         <Route path='/abstracts/edit/:abstractId'>
+            <EditAbstract
+               register={register}
+               watch={watch}
+               history={history}
+               abstract={state?.abstractFile}
+               loading={updating}
+               error={updateError}
+               update={updateAbstract}
+            />
+         </Route>
+         <Route path='/abstracts/:abstractId'>
+            <ViewAbstract
+               register={register}
+               watch={watch}
+               history={history}
+               abstract={state?.abstractFile}
+               loading={opening}
+               error={openError}
+               update={updateAbstract}
+               delete={deleteAbstract}
+            />
+         </Route>
+      </Switch>
+   )
+
    return (
       <Switch>
-         <Route exact path='/abstract/new/:abstractId'>
+         <Route path='/abstracts/new/:abstractId'>
             <CreateAbstract
                register={register}
                watch={watch}
@@ -113,34 +158,7 @@ function Abstracts(props) {
                abstracts={state?.myAbstracts}
             />
          </Route>
-         <Route path='/abstracts/:abstractId'>
-            {state?.abstractFile && (
-               <ViewAbstract
-                  register={register}
-                  watch={watch}
-                  history={history}
-                  abstract={state?.abstractFile}
-                  loading={opening}
-                  error={openError}
-                  update={updateAbstract}
-                  delete={deleteAbstract}
-               />
-            )}
-         </Route>
-         <Route path='/abstract/edit/:abstractId'>
-            {state?.abstractFile && (
-               <EditAbstract
-                  register={register}
-                  watch={watch}
-                  history={history}
-                  abstract={state?.abstractFile}
-                  loading={updating}
-                  error={updateError}
-                  update={updateAbstract}
-               />
-            )}
-         </Route>
-         )
+         {state?.abstractFile && renderAbstractRoutes}
       </Switch>
    )
 }

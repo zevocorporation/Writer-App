@@ -12,30 +12,29 @@ function Hero(props) {
    const styles = {
       hero: {
          display: 'flex',
+         paddingTop: '52px',
+         justifyContent: 'space-around',
          backgroundColor: Colors.primary,
          flexDirection:
             (device === 'mobile' && 'column') ||
             (device === 'desktop' && 'row'),
-         maxWidth: '100%',
       },
 
       container: {
          left: {
             display: 'flex',
             flexDirection: 'column',
-            width: '90%',
-            padding: '2% 5%',
+            width: '100',
+            padding: '16px',
             justifyContent: 'center',
-            minHeight: '40vh',
+            height: '100',
          },
          right: {
             display: 'flex',
-            width: '90%',
-            padding: '2% 5%',
+            width: '100',
+            padding: '16px',
             justifyContent: 'center',
          },
-         width: '100%',
-         maxWidth: '100%',
       },
       form: {
          position: device === ('desktop' || 'tablet') && 'absolute',

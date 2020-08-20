@@ -6,7 +6,8 @@ function Button(props) {
    const styles = {
       button: {
          display: 'flex',
-         padding: '12px 5%',
+         flexWrap: 'wrap',
+         padding: '12px 32px',
          justifyContent: 'center',
          alignItems: 'center',
          backgroundColor: props.color ? props.color : Colors.secondary,
@@ -17,7 +18,6 @@ function Button(props) {
          fontSize: '16px',
          marginTop: '16px',
          marginBottom: '16px',
-         maxWidth: '100%',
          minWidth: '120px',
          outline: 'none',
          cursor: 'pointer',
@@ -28,7 +28,13 @@ function Button(props) {
       <button
          type={props.type}
          id={props.id}
-         onClick={props.onClick}
+         onClick={
+            props.target
+               ? () => {
+                    window.location.href = props.target
+                 }
+               : props.onClick
+         }
          style={styles.button}
          disabled={props.disabled}
       >

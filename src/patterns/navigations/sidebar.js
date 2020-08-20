@@ -1,29 +1,47 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from '../../components/index'
 import { Colors } from '../../styles/base'
+import { DeviceContext } from '../../store/contexts/index'
 
 function Sidebar(props) {
+   const device = useContext(DeviceContext)
+
    const styles = {
       sidebar: {
-         backgroundColor: Colors.tertiary,
-         position: 'absolute',
-         top: 52,
-         left: 0,
+         backgroundColor: Colors.primary,
+         display: 'flex',
+         flexDirection: 'column',
          padding: '16px',
-         width: '12vw',
-         height: '87.5vh',
+         width: '15vw',
+         height: '100%',
+         position: 'fixed',
+         marginTop: '52px',
+      },
+      mobar: {
+         backgroundColor: Colors.primary,
+         width: '100%',
+         display: 'flex',
+         paddingTop: '52px',
+      },
+
+      link: {
+         color: Colors.accent.secondary,
+         backgroundColor: Colors.secondary,
+         padding: '8px 16px',
+         borderRadius: '5px',
+         fontSize: '14px',
+         fontWeight: 580,
+         margin: '16px',
+         textAlign: 'center',
       },
    }
+
    return (
-      <div style={styles.sidebar}>
-         <Link
-            to='/abstracts'
-            style={{
-               color: Colors.accent.secondary,
-               fontSize: '2.5vh',
-               fontWeight: 580,
-            }}
-         >
+      <div style={device === 'mobile' ? styles.mobar : styles.sidebar}>
+         <Link to='/' style={styles.link}>
+            Dashboard
+         </Link>
+         <Link to='/abstracts' style={styles.link}>
             Abstracts
          </Link>
       </div>

@@ -55,14 +55,25 @@ async function verificationCode(verificationCode) {
 }
 
 async function wordCount(text, wordLimit, field) {
-   var totalSoFar = 0
-   for (var i = 1; i < text.length; i++) {
-      if (text[i] === ' ') {
-         totalSoFar++
+   const result = text
+      .split('.')
+      .filter((sentence) => sentence !== ' ')
+      .map(
+         (sentence) => sentence.split(' ').filter((word) => word !== '').length
+      )
+
+   let count = 0
+   result.forEach((item) => {
+      count = count + item
+   })
+
+   if (text.length === 0) {
+      return {
+         message: `Please enter the ${field}`,
       }
    }
 
-   if (totalSoFar > wordLimit) {
+   if (count > wordLimit) {
       return {
          message: `${field} can only contain ${wordLimit} words. Please reduce words`,
       }

@@ -7,6 +7,25 @@ import { Colors } from '../../../styles/base/index'
 function CreateAbstract(props) {
    const [warning, setWarning] = useState()
 
+   const putSpace = (text) => {
+      return !props.watch(text)?.charAt(0).includes(' ') && ' '
+   }
+
+   const finalAbstract =
+      props.watch('significance') +
+      putSpace('significance') +
+      props.watch('description') +
+      putSpace('description') +
+      props.watch('knowledgeGap') +
+      putSpace('knowledgeGap') +
+      props.watch('researchQuestion') +
+      putSpace('researchQuestion') +
+      props.watch('hypothesis') +
+      putSpace('hypothesis') +
+      props.watch('majorTrends') +
+      putSpace('majorTrends') +
+      props.watch('conclusion')
+
    async function create() {
       const validateTitle = await Validator.wordCount(
          props.watch('title'),
@@ -100,7 +119,7 @@ function CreateAbstract(props) {
                hypothesis: props.watch('hypothesis'),
                majorTrends: props.watch('majorTrends'),
                conclusion: props.watch('conclusion'),
-               abstract: props.watch('abstract'),
+               abstract: finalAbstract,
             },
          })
          if (res.data?.createAbstract?._id) {
@@ -109,14 +128,6 @@ function CreateAbstract(props) {
       }
    }
 
-   const finalAbstract =
-      props.watch('significance') +
-      props.watch('description') +
-      props.watch('knowledgeGap') +
-      props.watch('researchQuestion') +
-      props.watch('hypothesis') +
-      props.watch('majorTrends') +
-      props.watch('conclusion')
    const renderAbstract = (
       <React.Fragment>
          {warning && <Alert type='WARN_MESSAGE'>{warning}</Alert>}
@@ -213,7 +224,6 @@ function CreateAbstract(props) {
          <div style={Styles.form.textControl}>
             <Text
                style={{
-                  margin: '32px 0px 32px 0px',
                   backgroundColor: Colors.alert.success,
                   color: Colors.accent.secondary,
                   padding: '8px 32px 8px 32px',
@@ -224,32 +234,120 @@ function CreateAbstract(props) {
             >
                Your abstract
             </Text>
-            <Input
-               type='textArea'
-               style={Styles.form.textAreaInput}
-               register={props.register}
-               name='abstract'
-               value={finalAbstract}
-            />
+            {!finalAbstract.includes(undefined) && (
+               <Input
+                  type='textArea'
+                  style={Styles.form.textAreaInput}
+                  register={props.register}
+                  name='abstract'
+                  value={finalAbstract}
+               />
+            )}
          </div>
       </React.Fragment>
+   )
+
+   const renderHelper = (
+      <div
+         style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            marginBottom: '32px',
+         }}
+      >
+         <div
+            style={{
+               display: 'flex',
+               flexDirection: 'row',
+               justifyContent: 'flex-start',
+               alignItems: 'center',
+            }}
+         >
+            <Title style={{ fontSize: '16px', marginRight: '16px' }}>
+               Search for abstracts here
+            </Title>
+            <Text
+               style={{
+                  backgroundColor: Colors.accent.label,
+                  color: Colors.accent.secondary,
+                  padding: '8px 16px 8px 16px',
+                  width: 'fit-content',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  fontWeight: 100,
+               }}
+               type='textBold'
+            >
+               sample abstract
+            </Text>
+         </div>
+         <div
+            style={{
+               display: 'flex',
+               flexDirection: 'row',
+               flexWrap: 'wrap',
+               alignItems: 'center',
+               maxWidth: '100%',
+               justifyContent: 'space-between',
+            }}
+         >
+            <Button
+               style={{ width: '160px' }}
+               target='https://www.elsevier.com/en-in'
+               name='Elsevier'
+            />
+            <Button
+               style={{ width: '160px' }}
+               target='https://www.jstor.org/'
+               name='JSTOR'
+            />
+            <Button
+               style={{ width: '160px' }}
+               target='https://www.sciencedirect.com/'
+               name='Sciencedirect'
+            />
+            <Button style={{ width: '160px' }} name='EBSCO' />
+            <Button
+               style={{
+                  width: '160px',
+               }}
+               target='https://ieeexplore.ieee.org/'
+               name='IEEE Xplore'
+            />
+            <Button
+               style={{
+                  width: '160px',
+                  display: 'none',
+               }}
+               name='IEEE Xplore'
+            />
+         </div>
+         <div style={Styles.form.textControl}>
+            <Text>Paste your sample abstract here</Text>
+            <Input
+               type='textArea'
+               text={props.watch('sample')}
+               register={props.register}
+               name='sample'
+               style={Styles.form.textAreaInput}
+            />
+         </div>
+      </div>
    )
 
    return (
       <div style={Styles.dashboard}>
          <div style={Styles.dashboard.header}>
-            <Title>Manage abstracts</Title>
-            <Button
-               style={{ width: '280px' }}
-               name='Save now'
-               onClick={() => create()}
-            />
+            <Title>Create abstract</Title>
+            <Button name='Save now' onClick={() => create()} />
          </div>
          <div style={Styles.dashboard.content}>
             {props.error && (
                <Alert type='ERROR_MESSAGE'>{props.error.message}</Alert>
             )}
             {props.loading && <h1>loading...</h1>}
+            {renderHelper}
             {renderAbstract}
          </div>
       </div>

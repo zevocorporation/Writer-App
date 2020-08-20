@@ -16,13 +16,13 @@ function Navlinks(props) {
          alignItems: 'center',
       },
       navlink: {
-         color: Colors.accent.secondary,
+         color: props.navColor,
          margin: '0px 25px',
          textDecoration: 'none',
       },
    }
    const logoutHandler = () => {
-      localStorage.setItem('token', JSON.stringify({}))
+      localStorage.clear()
       dispatch({
          type: 'LOG_OUT',
       })

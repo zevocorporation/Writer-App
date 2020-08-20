@@ -2,7 +2,13 @@ import React from 'react'
 import { Text, Title, Alert, Button, Card, Input } from '../../../components'
 import Styles from '../../../styles/styles'
 import { Colors } from '../../../styles/base/index'
+import { DeviceContext } from '../../../store/contexts/index'
+import { useRouteMatch } from 'react-router-dom'
+
 function ViewAbstract(props) {
+   const device = React.useContext(DeviceContext)
+   const { path } = useRouteMatch()
+
    const styles = {
       text: { color: Colors.accent.label },
       text2: { color: Colors.accent.label, fontSize: '14px' },
@@ -24,8 +30,12 @@ function ViewAbstract(props) {
       }
    }
    const renderAbstract = (
-      <React.Fragment>
-         <Input disabled={true} style={{ padding: '16px 0px' }} type='textArea'>
+      <div
+         style={{
+            width: device === 'desktop' ? '60%' : '100%',
+         }}
+      >
+         <Input disabled={true} type='textArea'>
             {props.abstract.abstract}
          </Input>
 
@@ -99,14 +109,14 @@ function ViewAbstract(props) {
                )}
             </div>
          </div>
-      </React.Fragment>
+      </div>
    )
 
    const renderDetailsCard = (
       <Card
          style={{
             textAlign: 'left',
-            padding: '32px',
+            padding: '16px',
          }}
       >
          <div style={Styles.form.textControl}>
@@ -127,15 +137,16 @@ function ViewAbstract(props) {
             </Text>
             <Text style={styles.text2}>{props.abstract.updatedAt}</Text>
          </div>
-         <div style={Styles.form.textControl}>
-            <Button
-               style={{ backgroundColor: Colors.alert.error }}
-               name='Delete'
-               onClick={() => deleteAbstract(props.abstract._id)}
-            >
-               Delete
-            </Button>
-         </div>
+         <Button
+            style={{
+               backgroundColor: Colors.alert.error,
+               width: '100%',
+            }}
+            name='Delete'
+            onClick={() => deleteAbstract(props.abstract._id)}
+         >
+            Delete
+         </Button>
       </Card>
    )
 
@@ -144,11 +155,10 @@ function ViewAbstract(props) {
          <div style={Styles.dashboard.header}>
             <Title>{props.abstract.title}</Title>
             <Button
-               style={{ width: '280px' }}
                name='Edit'
                onClick={() =>
                   props.history.push(
-                     `/abstract/edit/node=${Math.floor(
+                     `/abstracts/edit/node=${Math.floor(
                         Math.random() * 10
                      )}?id=${props.abstract._id}`
                   )
@@ -157,7 +167,7 @@ function ViewAbstract(props) {
          </div>
          <div
             style={{
-               display: 'flex',
+               display: device === 'desktop' && 'flex',
                justifyContent: 'space-between',
                padding: '16px',
             }}
@@ -167,14 +177,14 @@ function ViewAbstract(props) {
             )}
             {props.loading && <h1>loading...</h1>}
 
+            {renderAbstract}
             <div
                style={{
-                  width: '76%',
+                  margin:
+                     device === 'desktop' ? '0px 0px 0px 16px' : '16px 0px',
+                  width: device === 'desktop' && '40%',
                }}
             >
-               {renderAbstract}
-            </div>
-            <div style={{ margin: '0px 0px 0px auto' }}>
                {renderDetailsCard}
             </div>
          </div>

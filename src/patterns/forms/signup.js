@@ -12,18 +12,22 @@ function Signup(props) {
    const [code, setCode] = useState()
    const [mobile, setMobile] = useState()
    const [warning, setWarning] = useState()
+   const [error, setError] = useState()
 
    async function sendCode(mobile) {
       const validateMobile = await Validator.mobile(mobile)
+      setError()
 
       if (validateMobile.message) {
          setWarning({ mobile: validateMobile.message })
       }
       if (validateMobile?.isValid) {
+         console.log('valid')
          if (props.type === 'SIGN_UP') {
             const res = await props.sendSignupCode({
                variables: { mobile: mobile },
             })
+            if (res?.errors) setError(res.errors[0].message)
             if (res.data?.sendCode) {
                setMobile(mobile)
                setIsSent(true)
@@ -33,6 +37,7 @@ function Signup(props) {
             const res = await props.sendResetCode({
                variables: { mobile: mobile },
             })
+            if (res?.errors) setError(res.errors[0].message)
             if (res.data?.sendCode) {
                setMobile(mobile)
                setIsSent(true)
@@ -43,6 +48,7 @@ function Signup(props) {
 
    async function verify(code, mobile) {
       const validateCode = await Validator.verificationCode(code)
+      setError()
 
       if (validateCode.message) {
          setWarning({ code: validateCode.message })
@@ -51,6 +57,7 @@ function Signup(props) {
          const res = await props.verify({
             variables: { code: code, mobile: mobile },
          })
+         if (res?.errors) setError(res.errors[0].message)
          if (res.data?.verifyCode) {
             setCode(code)
             setMobile(mobile)
@@ -61,6 +68,7 @@ function Signup(props) {
 
    async function signup(e, mobile, code, password, confirmPassword) {
       e.preventDefault()
+      setError()
 
       const validatePassword = await Validator.password(props.watch(password))
       const validateConfirmPassword = await Validator.confirmPassword(
@@ -78,6 +86,8 @@ function Signup(props) {
             const res = await props.signup({
                variables: { mobile: mobile, password: password, code: code },
             })
+            if (res?.errors) setError(res.errors[0].message)
+
             if (res.data?.signUp) {
                props.login({
                   variables: { mobile: mobile, password: password },
@@ -88,6 +98,8 @@ function Signup(props) {
             const res = await props.reset({
                variables: { mobile: mobile, newPassword: password, code: code },
             })
+            if (res?.errors) setError(res.errors[0].message)
+
             if (res.data?.resetPassword) {
                props.login({
                   variables: { mobile: mobile, password: password },
@@ -143,7 +155,7 @@ function Signup(props) {
          </div>
          <div style={Styles.form.control}>
             <Input
-               name='mobile'
+               name='cmobile'
                register={props.register}
                type='inline-button'
                inputType='tel'
@@ -153,15 +165,13 @@ function Signup(props) {
                maxLength='10'
                loading={props.loading}
                onChange={() => setWarning(null)}
-               icon={props.watch('mobile')?.trim().length === 10 && 'SUCCESS'}
-               btnOnClick={() => sendCode(props.watch('mobile'))}
+               icon={props.watch('cmobile')?.trim().length === 10 && 'SUCCESS'}
+               btnOnClick={() => sendCode(props.watch('cmobile'))}
             />
             {warning?.mobile && (
                <Alert type='WARN_MESSAGE'>{warning.mobile}</Alert>
             )}
-            {props.error && (
-               <Alert type='ERROR_MESSAGE'>{props.error?.message}</Alert>
-            )}
+            {error && <Alert type='ERROR_MESSAGE'>{error}</Alert>}
          </div>
          {renderFooter}
       </div>
@@ -186,9 +196,7 @@ function Signup(props) {
                icon={props.watch('code')?.trim().length === 4 && 'SUCCESS'}
             />
             {warning?.code && <Alert type='WARN_MESSAGE'>{warning.code}</Alert>}
-            {props.error && (
-               <Alert type='ERROR_MESSAGE'>{props.error?.message}</Alert>
-            )}
+            {error && <Alert type='ERROR_MESSAGE'>{error}</Alert>}
             <Button
                name='Verify'
                loading={props.loading}
@@ -259,9 +267,7 @@ function Signup(props) {
             {warning?.confirmPassword && (
                <Alert type='WARN_MESSAGE'>{warning.confirmPassword}</Alert>
             )}
-            {props.error && (
-               <Alert type='ERROR_MESSAGE'>{props.error?.message}</Alert>
-            )}
+            {error && <Alert type='ERROR_MESSAGE'>{error}</Alert>}
             <Button
                name='Signup'
                loading={props.loading}

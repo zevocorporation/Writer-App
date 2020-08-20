@@ -8,21 +8,16 @@ import { Input, Link, Text, Title, Button, Alert } from '../../components/index'
 
 export default function Login(props) {
    const [warning, setWarning] = useState()
+   const [error, setError] = useState()
 
    async function login(e, mobile, password) {
       e.preventDefault()
-      const validateMobile = await Validator.mobile(props.watch('mobile'))
-      const validatePassword = await Validator.password(props.watch('password'))
+      setError()
 
-      if (validatePassword.message) {
-         setWarning({ password: validatePassword.message })
-      }
-      if (validateMobile.message) {
-         setWarning({ mobile: validateMobile.message })
-      }
-      if (validateMobile?.isValid && validatePassword?.isValid) {
-         props.login({ variables: { mobile: mobile, password: password } })
-      }
+      const res = await props.login({
+         variables: { mobile: mobile, password: password },
+      })
+      if (res?.errors) setError(res.errors[0].message)
    }
 
    const renderFooter = (
@@ -74,7 +69,6 @@ export default function Login(props) {
                register={props.register}
                inputStyle={{ backgroundColor: Colors.primaryLight }}
                onChange={() => setWarning(null)}
-               icon={props.watch('mobile')?.trim().length === 10 && 'SUCCESS'}
             />
             {warning?.mobile && (
                <Alert type='WARN_MESSAGE'>{warning.mobile}</Alert>
@@ -90,18 +84,11 @@ export default function Login(props) {
                inputStyle={{ backgroundColor: Colors.primaryLight }}
                register={props.register}
                onChange={() => setWarning(null)}
-               icon={
-                  props.watch('password')?.trim().length >= 8 &&
-                  props.watch('password')?.trim().length <= 20 &&
-                  'SUCCESS'
-               }
             />
             {warning?.password && (
                <Alert type='WARN_MESSAGE'>{warning.password}</Alert>
             )}
-            {props.error && (
-               <Alert type='ERROR_MESSAGE'>{props.error.message}</Alert>
-            )}
+            {error && !warning && <Alert type='ERROR_MESSAGE'>{error}</Alert>}
             <Button
                name='Login'
                type='submit'
