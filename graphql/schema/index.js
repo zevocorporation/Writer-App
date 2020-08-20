@@ -22,11 +22,11 @@ const typeDefs = gql`
     subject: String!
     title: String!
     significance: String!
-    description: String!
-    knowledgeGap: String!
-    researchQuestion: String!
-    hypothesis: String!
-    majorTrends: String!
+    description: String
+    knowledgeGap: String
+    researchQuestion: String
+    hypothesis: String
+    majorTrends: String
     conclusion: String!
     abstract: String!
     createdAt: DateTime!
@@ -70,11 +70,11 @@ const typeDefs = gql`
     subject: String!
     title: String!
     significance: String!
-    description: String!
-    knowledgeGap: String!
-    researchQuestion: String!
-    hypothesis: String!
-    majorTrends: String!
+    description: String
+    knowledgeGap: String
+    researchQuestion: String
+    hypothesis: String
+    majorTrends: String
     conclusion: String!
     abstract: String!
   }
@@ -83,11 +83,11 @@ const typeDefs = gql`
     _id: ID!
     title: String!
     significance: String!
-    description: String!
-    knowledgeGap: String!
-    researchQuestion: String!
-    hypothesis: String!
-    majorTrends: String!
+    description: String
+    knowledgeGap: String
+    researchQuestion: String
+    hypothesis: String
+    majorTrends: String
     conclusion: String!
     abstract: String!
   }

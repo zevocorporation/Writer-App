@@ -21,23 +21,18 @@ const abstractSchema = new Schema(
     },
     description: {
       type: String,
-      required: true,
     },
     knowledgeGap: {
       type: String,
-      required: true,
     },
     researchQuestion: {
       type: String,
-      required: true,
     },
     hypothesis: {
       type: String,
-      required: true,
     },
     majorTrends: {
       type: String,
-      required: true,
     },
     conclusion: {
       type: String,
