@@ -63,7 +63,7 @@ exports.mutationResolver = {
             .catch((err) => {
                throw err
             })
-         if (!otpSent) return true
+         if (otpSent) return true
          return false
       } catch (err) {
          throw err

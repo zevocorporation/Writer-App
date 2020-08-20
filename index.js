@@ -21,7 +21,7 @@ const store = new MongoDBStore({
 
 app.use(
    cors({
-      origin: 'http://15.206.70.204:4000/graphql',
+      origin: 'http://ec2-15-206-70-204.ap-south-1.compute.amazonaws.com:3000',
       credentials: true,
    })
 )
