@@ -54,7 +54,7 @@ async function verificationCode(verificationCode) {
    }
 }
 
-async function wordCount(text, wordLimit, field) {
+async function wordCount(text, wordLimit,required, field) {
    const result = text
       .split('.')
       .filter((sentence) => sentence !== ' ')
@@ -67,7 +67,7 @@ async function wordCount(text, wordLimit, field) {
       count = count + item
    })
 
-   if (text.length === 0) {
+   if (required && text.length === 0) {
       return {
          message: `Please enter the ${field}`,
       }

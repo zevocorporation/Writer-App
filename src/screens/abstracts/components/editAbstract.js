@@ -1,70 +1,116 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Text, Title, Input, Alert, Button } from '../../../components'
 import Styles from '../../../styles/styles'
 import { Colors } from '../../../styles/base/index'
 import { Validator } from '../../../utils/index'
 
 function EditAbstract(props) {
-   const [warning, setWarning] = React.useState()
+   const [warning, setWarning] = useState()
+   const [significance, setSignificance] = useState(props.abstract.significance)
+   const [description, setDescription] = useState(props.abstract.description)
+   const [knowledgeGap, setKnowledgeGap] = useState(props.abstract.knowledgeGap)
+   const [researchQuestion, setResearchQuestion] = useState(props.abstract.researchQuestion)
+   const [hypothesis, setHypothesis] = useState(props.abstract.hypothesis)
+   const [majorTrends, setMajorTrends] = useState(props.abstract.majorTrends)
+   const [conclusion, setConclusion] = useState(props.abstract.conclusion)
+   const [finalAbstract, setFinalAbstract] = useState(props.abstract.abstract)
+
 
    const putSpace = (text) => {
-      return !props.watch(text)?.charAt(0).includes(' ') && ' '
+      if(!text.charAt(0).includes(' ')) 
+      {
+         return ' ' + text
+      }
    }
 
-   const finalAbstract =
-      props.watch('significance') +
-      putSpace('significance') +
-      props.watch('description') +
-      putSpace('description') +
-      props.watch('knowledgeGap') +
-      putSpace('knowledgeGap') +
-      props.watch('researchQuestion') +
-      putSpace('researchQuestion') +
-      props.watch('hypothesis') +
-      putSpace('hypothesis') +
-      props.watch('majorTrends') +
-      putSpace('majorTrends') +
-      props.watch('conclusion')
+   function updateInput(e,text){
+      e.preventDefault()
+      const spacedText = putSpace(text)
+      
+      if (text === props.watch('significance')) setSignificance(spacedText)
+
+      if (text === props.watch('description')) setDescription(spacedText)
+
+      if (text === props.watch('knowledgeGap')) setKnowledgeGap(spacedText)
+      
+      if (text === props.watch('researchQuestion')) setResearchQuestion(spacedText)
+      
+      if (text === props.watch('hypothesis')) setHypothesis(spacedText)
+
+      if (text === props.watch('majorTrends')) setMajorTrends(spacedText)
+
+      if (text === props.watch('conclusion')) setConclusion(spacedText)
+
+      function validate(name){
+         if(name)
+         {
+            return name
+         }
+         else return props.watch(name)
+      }
+       
+
+      const final = 
+      validate(significance) + 
+      validate(description) + 
+      validate(knowledgeGap) + 
+      validate(researchQuestion) + 
+      validate(hypothesis) + 
+      validate(majorTrends) + 
+      validate(conclusion)
+      
+      setFinalAbstract(final)
+   }     
    async function update() {
       const validateTitle = await Validator.wordCount(
          props.watch('title'),
          5,
+         true,
          'Title'
       )
 
       const validateSignificance = await Validator.wordCount(
          props.watch('significance'),
          25,
+         true,
          'Significance'
       )
       const validateDescription = await Validator.wordCount(
          props.watch('description'),
          35,
+         false,
          'Description'
       )
       const validateKnowledgeGap = await Validator.wordCount(
          props.watch('knowledgeGap'),
          35,
+         false,
+
          'KnowledgeGap'
       )
       const validateResearchQuestion = await Validator.wordCount(
          props.watch('researchQuestion'),
          35,
+         false,
+
          'ResearchQuestion'
       )
       const validateHypothesis = await Validator.wordCount(
          props.watch('hypothesis'),
          35,
-         'Hypothesis'
+         false,
+         'hypothesis'
       )
       const validateMajorTrends = await Validator.wordCount(
          props.watch('majorTrends'),
          35,
+         false,
          'MajorTrends'
       )
       const validateConclusion = await Validator.wordCount(
          props.watch('conclusion'),
          35,
+         true,
          'Conclusion'
       )
 
@@ -104,14 +150,14 @@ function EditAbstract(props) {
             variables: {
                id: props.abstract._id,
                title: props.watch('title'),
-               significance: props.watch('significance'),
-               description: props.watch('description'),
-               knowledgeGap: props.watch('knowledgeGap'),
-               researchQuestion: props.watch('researchQuestion'),
-               hypothesis: props.watch('hypothesis'),
-               majorTrends: props.watch('majorTrends'),
-               conclusion: props.watch('conclusion'),
-               abstract: !finalAbstract.includes(undefined)
+               significance: significance,
+               description: description,
+               knowledgeGap: knowledgeGap,
+               researchQuestion: researchQuestion,
+               hypothesis: hypothesis,
+               majorTrends: majorTrends,
+               conclusion: conclusion,
+               abstract: finalAbstract
                   ? finalAbstract
                   : props.abstract.abstract,
             },
@@ -145,8 +191,9 @@ function EditAbstract(props) {
                register={props.register}
                name='significance'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('significance'))}
             >
-               {props.abstract.significance}
+               {significance}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -158,8 +205,10 @@ function EditAbstract(props) {
                register={props.register}
                name='description'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('description'))}
+
             >
-               {props.abstract.description}
+               {description}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -171,8 +220,10 @@ function EditAbstract(props) {
                register={props.register}
                name='knowledgeGap'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('knowledgeGap'))}
+
             >
-               {props.abstract.knowledgeGap}
+               {knowledgeGap}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -184,8 +235,10 @@ function EditAbstract(props) {
                register={props.register}
                name='researchQuestion'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('researchQuestion'))}
+
             >
-               {props.abstract.researchQuestion}
+               {researchQuestion}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -197,8 +250,10 @@ function EditAbstract(props) {
                register={props.register}
                name='hypothesis'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('hypothesis'))}
+
             >
-               {props.abstract.hypothesis}
+               {hypothesis}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -210,8 +265,11 @@ function EditAbstract(props) {
                register={props.register}
                name='majorTrends'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('majorTrends'))}
+
             >
-               {props.abstract.majorTrends}
+             
+               {majorTrends}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -223,8 +281,9 @@ function EditAbstract(props) {
                register={props.register}
                name='conclusion'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('conclusion'))}
             >
-               {props.abstract.conclusion}
+               {conclusion}
             </Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -241,7 +300,7 @@ function EditAbstract(props) {
             >
                Your abstract
             </Text>{' '}
-            {!finalAbstract.includes(undefined) && (
+            
                <Input
                   style={{ paddingTop: '16px' }}
                   type='textArea'
@@ -250,7 +309,7 @@ function EditAbstract(props) {
                   name='abstract'
                   value={finalAbstract}
                />
-            )}
+         
          </div>
       </React.Fragment>
    )

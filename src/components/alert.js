@@ -44,10 +44,10 @@ function Alert(props) {
                style={{ height: '80px' }}
             />
             <Title color={Colors.secondary}></Title>
-            <Text>Login success</Text>
+            <Text>{props.children}</Text>
             <div style={styles.modalControls}>
-               <Button style={{ width: '100px' }} name='Okay' />
-               <Button color={Colors.alert.error} name='Delete' />
+               <Button onClick={props.onAbort} style={{ width: '100px' }} name='Cancel' />
+               <Button onClick={props.onConfirm} color={Colors.alert.error} name='Delete' />
             </div>
          </div>
       </Backdrop>
@@ -72,7 +72,9 @@ function Alert(props) {
       (props.type === 'ERROR_MESSAGE' && renderMessage) ||
       (props.type === 'SUCCESS_MESSAGE' && renderMessage) ||
       (props.type === 'WARN_MESSAGE' && renderMessage) ||
-      (props.type === 'SUCCESS_MESSAGE_MODAL' && renderModal)
+      (props.type === 'SUCCESS_MESSAGE_MODAL' && renderModal)||
+      (props.type === 'WARN_MESSAGE_MODAL' && renderModal)
+
    )
 }
 

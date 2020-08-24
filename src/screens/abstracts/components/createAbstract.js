@@ -6,70 +6,106 @@ import { Colors } from '../../../styles/base/index'
 
 function CreateAbstract(props) {
    const [warning, setWarning] = useState()
+   const [significance, setSignificance] = useState()
+   const [description, setDescription] = useState()
+   const [knowledgeGap, setKnowledgeGap] = useState()
+   const [researchQuestion, setResearchQuestion] = useState()
+   const [hypothesis, setHypothesis] = useState()
+   const [majorTrends, setMajorTrends] = useState()
+   const [conclusion, setConclusion] = useState()
+   const [finalAbstract, setFinalAbstract] = useState()
+
 
    const putSpace = (text) => {
-      return !props.watch(text)?.charAt(0).includes(' ') && ' '
+      if(!text.charAt(0).includes(' ')) 
+      {
+         return ' '+text
+      }
    }
 
-   const finalAbstract =
-      props.watch('significance') +
-      putSpace('significance') +
-      props.watch('description') +
-      putSpace('description') +
-      props.watch('knowledgeGap') +
-      putSpace('knowledgeGap') +
-      props.watch('researchQuestion') +
-      putSpace('researchQuestion') +
-      props.watch('hypothesis') +
-      putSpace('hypothesis') +
-      props.watch('majorTrends') +
-      putSpace('majorTrends') +
-      props.watch('conclusion')
+   function updateInput(e,text){
+      e.preventDefault()
+      const spacedText = putSpace(text)
+      if (props.watch('significance') && text === props.watch('significance')) setSignificance(spacedText)
+      if (props.watch('description') && text === props.watch('description')) setDescription(spacedText)
+      if (props.watch('knowledgeGap') && text === props.watch('knowledgeGap')) setKnowledgeGap(spacedText)
+      if (props.watch('researchQuestion') && text === props.watch('researchQuestion')) setResearchQuestion(spacedText)
+      if (props.watch('hypothesis') && text === props.watch('hypothesis')) setHypothesis(spacedText)
+      if (props.watch('majorTrends') && text === props.watch('majorTrends')) setMajorTrends(spacedText)
+      if (props.watch('conclusion') &&text === props.watch('conclusion')) setConclusion(spacedText)
+
+      function validate(name){
+         if(name)
+         {
+            return name
+         }
+         else return ''
+      }
+      const final = 
+      validate(significance) + 
+      validate(description) + 
+      validate(knowledgeGap) + 
+      validate(researchQuestion) + 
+      validate(hypothesis) + 
+      validate(majorTrends) + 
+      validate(conclusion)
+      
+      setFinalAbstract(final)
+   }     
 
    async function create() {
       const validateTitle = await Validator.wordCount(
          props.watch('title'),
          5,
+         true,
          'Title'
       )
       const validateSubject = await Validator.wordCount(
          props.watch('subject'),
          5,
+         true,
          'Subject'
       )
       const validateSignificance = await Validator.wordCount(
          props.watch('significance'),
          25,
+         true,
          'Significance'
       )
       const validateDescription = await Validator.wordCount(
          props.watch('description'),
          35,
+         false,
          'Description'
       )
       const validateKnowledgeGap = await Validator.wordCount(
          props.watch('knowledgeGap'),
          35,
+         false,
          'KnowledgeGap'
       )
       const validateResearchQuestion = await Validator.wordCount(
          props.watch('researchQuestion'),
          35,
+         false,
          'ResearchQuestion'
       )
       const validateHypothesis = await Validator.wordCount(
          props.watch('hypothesis'),
          35,
+         false,
          'Hypothesis'
       )
       const validateMajorTrends = await Validator.wordCount(
          props.watch('majorTrends'),
          35,
+         false,
          'MajorTrends'
       )
       const validateConclusion = await Validator.wordCount(
          props.watch('conclusion'),
          35,
+         true,
          'Conclusion'
       )
 
@@ -128,9 +164,9 @@ function CreateAbstract(props) {
       }
    }
 
+   
    const renderAbstract = (
       <React.Fragment>
-         {warning && <Alert type='WARN_MESSAGE'>{warning}</Alert>}
          <div style={Styles.form.textControl}>
             <Text>Title</Text>
             <Input
@@ -153,6 +189,7 @@ function CreateAbstract(props) {
                register={props.register}
                name='significance'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('significance'))}
             ></Input>
          </div>
          <div style={Styles.form.textControl}>
@@ -164,6 +201,8 @@ function CreateAbstract(props) {
                register={props.register}
                name='description'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('description'))}
+
             />
          </div>
          <div style={Styles.form.textControl}>
@@ -175,6 +214,8 @@ function CreateAbstract(props) {
                register={props.register}
                name='knowledgeGap'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('knowledgeGap'))}
+
             />
          </div>
          <div style={Styles.form.textControl}>
@@ -186,6 +227,8 @@ function CreateAbstract(props) {
                register={props.register}
                name='researchQuestion'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('researchQuestion'))}
+
             />
          </div>
          <div style={Styles.form.textControl}>
@@ -197,6 +240,8 @@ function CreateAbstract(props) {
                register={props.register}
                name='hypothesis'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('hypothesis'))}
+
             />
          </div>
          <div style={Styles.form.textControl}>
@@ -208,6 +253,8 @@ function CreateAbstract(props) {
                register={props.register}
                name='majorTrends'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('majorTrends'))}
+
             />
          </div>
          <div style={Styles.form.textControl}>
@@ -219,6 +266,7 @@ function CreateAbstract(props) {
                register={props.register}
                name='conclusion'
                style={Styles.form.textAreaInput}
+               onChange={(e)=>updateInput(e,props.watch('conclusion'))}
             />
          </div>
          <div style={Styles.form.textControl}>
@@ -234,7 +282,7 @@ function CreateAbstract(props) {
             >
                Your abstract
             </Text>
-            {!finalAbstract.includes(undefined) && (
+            {
                <Input
                   type='textArea'
                   style={Styles.form.textAreaInput}
@@ -242,18 +290,22 @@ function CreateAbstract(props) {
                   name='abstract'
                   value={finalAbstract}
                />
-            )}
+            }
          </div>
       </React.Fragment>
    )
 
    const renderHelper = (
+      <React.Fragment>
+      {warning && <Alert type='WARN_MESSAGE'>{warning}</Alert>}
       <div
          style={{
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
             marginBottom: '32px',
+            marginTop: '32px',
+
          }}
       >
          <div
@@ -294,24 +346,35 @@ function CreateAbstract(props) {
          >
             <Button
                style={{ width: '160px' }}
+               newWindow = {true}
+
                target='https://www.elsevier.com/en-in'
                name='Elsevier'
             />
             <Button
                style={{ width: '160px' }}
+               newWindow = {true}
+
                target='https://www.jstor.org/'
                name='JSTOR'
             />
             <Button
                style={{ width: '160px' }}
                target='https://www.sciencedirect.com/'
+               newWindow = {true}
                name='Sciencedirect'
             />
-            <Button style={{ width: '160px' }} name='EBSCO' />
+            <Button
+               target='https://www.ebsco.com/'
+               newWindow = {true}
+               style={{ width: '160px' }}
+               name='EBSCO'
+            />
             <Button
                style={{
                   width: '160px',
                }}
+               newWindow = {true}
                target='https://ieeexplore.ieee.org/'
                name='IEEE Xplore'
             />
@@ -320,6 +383,7 @@ function CreateAbstract(props) {
                   width: '160px',
                   display: 'none',
                }}
+               newWindow = {true}
                name='IEEE Xplore'
             />
          </div>
@@ -334,6 +398,7 @@ function CreateAbstract(props) {
             />
          </div>
       </div>
+      </React.Fragment>
    )
 
    return (

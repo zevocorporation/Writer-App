@@ -7,6 +7,7 @@ import { useRouteMatch } from 'react-router-dom'
 
 function ViewAbstract(props) {
    const device = React.useContext(DeviceContext)
+   const [confirm, setConfirmMessage] = React.useState()
    const { path } = useRouteMatch()
 
    const styles = {
@@ -23,12 +24,7 @@ function ViewAbstract(props) {
          color: Colors.accent.primary,
       },
    }
-   async function deleteAbstract(id) {
-      const res = await props.delete({ variables: { id: id } })
-      if (res.data?.deleteAbstract?._id) {
-         props.history.push('/abstracts')
-      }
-   }
+
    const renderAbstract = (
       <div
          style={{
@@ -112,11 +108,25 @@ function ViewAbstract(props) {
       </div>
    )
 
+   function confirmDeletion(e) {
+      e.preventDefault()
+      setConfirmMessage('Are you sure')
+   }
+
+   async function alertDelete(e,id){
+      e.preventDefault(e)
+      const res = await props.delete({ variables: { id: id } })
+      if (res.data?.deleteAbstract?._id) {
+         props.history.push('/abstracts')
+      }
+   }
+
    const renderDetailsCard = (
       <Card
          style={{
             textAlign: 'left',
             padding: '16px',
+
          }}
       >
          <div style={Styles.form.textControl}>
@@ -143,7 +153,7 @@ function ViewAbstract(props) {
                width: '100%',
             }}
             name='Delete'
-            onClick={() => deleteAbstract(props.abstract._id)}
+            onClick={(e) => confirmDeletion(e)}
          >
             Delete
          </Button>
@@ -151,6 +161,7 @@ function ViewAbstract(props) {
    )
 
    return (
+      confirm ? <Alert type='WARN_MESSAGE_MODAL' onAbort={()=>setConfirmMessage()} onConfirm={(e)=>alertDelete(e,props.abstract._id)}>{confirm}</Alert> :
       <div style={Styles.dashboard}>
          <div style={Styles.dashboard.header}>
             <Title>{props.abstract.title}</Title>

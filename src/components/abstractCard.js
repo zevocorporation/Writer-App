@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Card, Text, Icon } from '.'
+import { Card, Text, Icon,Alert } from '.'
 import { DeleteIcon } from '../assets/assets'
 import { useRouteMatch } from 'react-router-dom'
 import { Colors } from '../styles/base/index'
@@ -8,6 +8,7 @@ import { DeviceContext } from '../store/contexts/index'
 function AbstractCard(props) {
    const { path } = useRouteMatch()
    const device = useContext(DeviceContext)
+   const [confirm, setConfirmMessage] = React.useState()
 
    async function open(e, id) {
       e.preventDefault()
@@ -15,9 +16,16 @@ function AbstractCard(props) {
          `${path}/node=${Math.floor(Math.random() * 10)}?id=${id}`
       )
    }
-   async function deleteAbstract(id) {
+
+   function confirmDeletion(e) {
+      e.preventDefault()
+      setConfirmMessage('Are you sure')
+   }
+
+   async function alertDelete(e,id){
+      e.preventDefault(e)
       const res = await props.delete({ variables: { id: id } })
-      if (res.data?.deleteAbstract) {
+      if (res.data?.deleteAbstract?._id) {
          props.history.push('/abstracts')
       }
    }
@@ -70,7 +78,7 @@ function AbstractCard(props) {
    const renderIcon = (
       <div style={styles.card.control}>
          <Icon
-            onClick={() => deleteAbstract(props.abstract._id)}
+            onClick={(e) => confirmDeletion(e)}
             style={{ width: '28px', margin: '16px' }}
             icon={DeleteIcon}
          />
@@ -96,6 +104,7 @@ function AbstractCard(props) {
    )
 
    const renderCard = (
+      confirm ? <Alert type='WARN_MESSAGE_MODAL' onAbort={()=>setConfirmMessage()} onConfirm={(e)=>alertDelete(e,props.abstract._id)}>{confirm}</Alert> :
       <Card style={styles.card}>
          <div
             style={styles.card.content}

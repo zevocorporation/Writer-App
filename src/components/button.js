@@ -31,7 +31,7 @@ function Button(props) {
          onClick={
             props.target
                ? () => {
-                    window.location.href = props.target
+                    props.newWindow ? window.open(props.target) : window.location.href = props.target
                  }
                : props.onClick
          }

@@ -22,7 +22,6 @@ function Signup(props) {
          setWarning({ mobile: validateMobile.message })
       }
       if (validateMobile?.isValid) {
-         console.log('valid')
          if (props.type === 'SIGN_UP') {
             const res = await props.sendSignupCode({
                variables: { mobile: mobile },
@@ -98,7 +97,6 @@ function Signup(props) {
    async function reset(e, mobile, code, password, confirmPassword) {
       e.preventDefault()
       setError()
-
       const validatePassword = await Validator.password(props.watch(password))
       const validateConfirmPassword = await Validator.confirmPassword(
          password,
@@ -112,7 +110,7 @@ function Signup(props) {
       }
       if (validatePassword?.isValid && validateConfirmPassword?.isValid) {
          const res = await props.reset({
-            variables: { mobile: mobile, newPassword: password, code: code },
+            variables: { mobile: mobile, password: password, code: code },
          })
          if (res?.errors) setError(res.errors[0].message)
          if (res.data?.resetPassword) {
