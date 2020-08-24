@@ -21,7 +21,7 @@ const store = new MongoDBStore({
 
 app.use(
    cors({
-      origin: 'http://ec2-15-206-70-204.ap-south-1.compute.amazonaws.com:3000',
+      origin: 'http://scholarlywriter.boyd.co.in',
       credentials: true,
    })
 )
