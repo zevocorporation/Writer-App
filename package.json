@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
    "name": "writer-space",
    "version": "0.1.0",
    "private": true,
@@ -43,6 +44,50 @@
          "last 1 chrome version",
          "last 1 firefox version",
          "last 1 safari version"
+=======
+   "name": "writer",
+   "version": "1.0.0",
+   "description": "Server ",
+   "main": "index.js",
+   "scripts": {
+      "test": "jest --testEnvironment=node",
+      "start": "nodemon index.js"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/zevocorporation/Writer-App.git"
+   },
+   "author": "",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/zevocorporation/Writer-App/issues"
+   },
+   "homepage": "https://github.com/zevocorporation/Writer-App#readme",
+   "dependencies": {
+      "apollo-server": "^2.15.1",
+      "apollo-server-express": "^2.15.1",
+      "apollo-server-testing": "^2.16.0",
+      "bcryptjs": "^2.4.3",
+      "connect-mongodb-session": "^2.3.3",
+      "cors": "^2.8.5",
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1",
+      "express-session": "^1.17.1",
+      "graphql": "^15.3.0",
+      "jsonwebtoken": "^8.5.1",
+      "mongodb": "^3.5.9",
+      "mongoose": "^5.9.24",
+      "request": "^2.88.2"
+   },
+   "devDependencies": {
+      "graphql-tag": "^2.10.4",
+      "jest": "^26.1.0",
+      "nodemon": "^2.0.4"
+   },
+   "jest": {
+      "testPathIgnorePatterns": [
+         "/node_modules/"
+>>>>>>> 8e3bc7ebf8e22d3bac547fa73e499b6418ebc0e6
       ]
    }
 }
