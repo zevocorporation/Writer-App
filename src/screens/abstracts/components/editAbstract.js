@@ -46,6 +46,7 @@ function EditAbstract(props) {
          {
             return name
          }
+         else return ''
       }
        
 
