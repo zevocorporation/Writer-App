@@ -46,7 +46,6 @@ function EditAbstract(props) {
          {
             return name
          }
-         else return props.watch(name)
       }
        
 
