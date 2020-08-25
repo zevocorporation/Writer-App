@@ -206,7 +206,7 @@ function Signup(props) {
                minLength='6'
                maxLength='6'
                onChange={() => setWarning(null)}
-               icon={props.watch('code')?.trim().length === 4 && 'SUCCESS'}
+               icon={props.watch('code')?.trim().length === 6 && 'SUCCESS'}
             />
             {warning?.code && <Alert type='WARN_MESSAGE'>{warning.code}</Alert>}
             {error && <Alert type='ERROR_MESSAGE'>{error}</Alert>}
