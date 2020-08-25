@@ -86,6 +86,16 @@ exports.mutationResolver = {
         majorTrends: args.abstractInput.majorTrends.trim(),
         conclusion: args.abstractInput.conclusion.trim(),
         abstract: args.abstractInput.abstract.trim(),
+        createdAt:
+          new Date().toLocaleString([], {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }) + ' IST',
+        updatedAt:
+          new Date().toLocaleString([], {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }) + ' IST',
       });
       const result = await newAbstract.save();
       return result;
@@ -144,7 +154,12 @@ exports.mutationResolver = {
         (getAbstract.hypothesis = args.updateAbstractInput.hypothesis.trim()),
         (getAbstract.majorTrends = args.updateAbstractInput.majorTrends.trim()),
         (getAbstract.conclusion = args.updateAbstractInput.conclusion.trim()),
-        (getAbstract.abstract = args.updateAbstractInput.abstract.trim());
+        (getAbstract.abstract = args.updateAbstractInput.abstract.trim()),
+        (getAbstract.updatedAt =
+          new Date().toLocaleString([], {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }) + ' IST');
       const editedAbstract = await getAbstract.save();
       return editedAbstract;
     } catch (err) {

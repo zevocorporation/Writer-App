@@ -29,8 +29,8 @@ const typeDefs = gql`
     majorTrends: String
     conclusion: String!
     abstract: String!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+    createdAt: String!
+    updatedAt: String!
   }
 
   type userData {
