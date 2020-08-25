@@ -62,7 +62,7 @@ function App() {
             <Router>
                <Navbar
                   logo={state?.isLoggedIn ? LogoLight : Logo}
-                  height='24px'
+                  height={!state?.isLoggedIn && '24px'}
                   color={
                      state?.isLoggedIn
                         ? Colors.accent.secondary
