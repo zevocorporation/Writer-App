@@ -21,7 +21,7 @@ function Sidebar(props) {
          backgroundColor: Colors.primary,
          width: '100%',
          display: 'flex',
-         paddingTop: '52px',
+         paddingTop: '62px',
       },
 
       link: {
