@@ -4,7 +4,7 @@ import { createHttpLink } from 'apollo-link-http'
 
 const cache = new InMemoryCache()
 const link = createHttpLink({
-   uri: 'http://ec2-15-206-70-204.ap-south-1.compute.amazonaws.com:4000',
+   uri: 'http://scholarlywriter.boyd.co.in:4000',
    credentials: 'include',
    headers: {
       authorization: `Bearer ${
