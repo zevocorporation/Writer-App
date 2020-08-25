@@ -57,11 +57,9 @@ function Hero(props) {
             </div>
             </div>
             <Title type='titleLarge' color={Colors.accent.secondary}>
-               research assistant
+            A Research Assistant
             </Title>
-            <Text type='textLight' color={Colors.accent.secondary}>
-               Writer assists you through every stage of your research writing
-               process
+            <Text type='textLight' color={Colors.accent.secondary}>Scholarly writer provides you a scaffolding for abstract writing
             </Text>
             <Button
                style={{
