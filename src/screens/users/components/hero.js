@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Colors } from '../../../styles/base'
 import { Text, Title, Button } from '../../../components'
 import { Authentication } from './users'
-
+import {LogoMccLight} from '../../../assets/assets'
 import { DeviceContext } from '../../../store/contexts'
 
 function Hero(props) {
@@ -45,7 +45,17 @@ function Hero(props) {
    return (
       <div style={styles.hero}>
          <div style={styles.container.left}>
-            <Text color={Colors.accent.secondary}>your virtual</Text>
+            <div style={{display: 'flex', alignItems:'center', marginBottom: '32px'}}>
+            <img style={{width: '90px',height: '107px'}} src={LogoMccLight} alt='logo-mcc' />
+            <div style={{display: 'flex', flexDirection: 'column'}}>          
+            <Text type='textLight' color={Colors.accent.secondary}>
+               a product of
+            </Text>
+            <Title color={Colors.accent.secondary}>
+               MADRAS CHRISTIAN COLLEGE
+            </Title>
+            </div>
+            </div>
             <Title type='titleLarge' color={Colors.accent.secondary}>
                research assistant
             </Title>
