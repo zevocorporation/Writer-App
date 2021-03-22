@@ -26,39 +26,41 @@ exports.mutationResolver = {
         throw new Error("Account doesn't exist. Please create one.");
       }
       let otpSent = false;
-      const otp = await Math.floor(100000 + Math.random() * 900000);
-      const options = {
-        method: 'GET',
-        url: 'https://global.datagenit.com/API/sms-api.php',
-        qs: {
-          auth: process.env.DATAGEN_AUTHKEY,
-          senderid: process.env.DATAGEN_SENDERID,
-          msisdn: mobileNumber,
-          message: `Your ${process.env.app_name} verification code is ${otp}. This code will expire in ${process.env.time} minutes. Please don't share this code for security reasons.`,
-        },
-        strictSSL: false,
-        rejectUnauthorized: false,
-        headers: {
-          'cache-control': 'no-cache',
-        },
-      };
+      // const otp = await Math.floor(100000 + Math.random() * 900000);
+      const otp = 123456;
+      // const options = {
+      //   method: 'GET',
+      //   url: 'https://global.datagenit.com/API/sms-api.php',
+      //   qs: {
+      //     auth: process.env.DATAGEN_AUTHKEY,
+      //     senderid: process.env.DATAGEN_SENDERID,
+      //     msisdn: mobileNumber,
+      //     message: `Your ${process.env.app_name} verification code is ${otp}. This code will expire in ${process.env.time} minutes. Please don't share this code for security reasons.`,
+      //   },
+      //   strictSSL: false,
+      //   rejectUnauthorized: false,
+      //   headers: {
+      //     'cache-control': 'no-cache',
+      //   },
+      // };
       req.session.otp = otp;
       req.session.mobile = mobileNumber;
-      let sendOtp = new Promise((resolve, reject) => {
-        request(options, (error, response, body) => {
-          if (error) reject(error);
-          resolve('Body:' + body);
-        });
-      });
-      await sendOtp
-        .then((result) => {
-          if (result[16] == 's') otpSent = true;
-        })
-        .catch((err) => {
-          throw err;
-        });
-      if (otpSent) return true;
-      return false;
+      // let sendOtp = new Promise((resolve, reject) => {
+      //   request(options, (error, response, body) => {
+      //     if (error) reject(error);
+      //     resolve('Body:' + body);
+      //   });
+      // });
+      // await sendOtp
+      //   .then((result) => {
+      //     if (result[16] == 's') otpSent = true;
+      //   })
+      //   .catch((err) => {
+      //     throw err;
+      //   });
+      // if (otpSent) return true;
+      // return false;
+      return true;
     } catch (err) {
       throw err;
     }
@@ -66,6 +68,7 @@ exports.mutationResolver = {
 
   verifyCode: async (_, args, { req }) => {
     try {
+      console.log(req.session.otp, req.session.mobile);
       if (req.session.mobile != args.verifyCodeInput.mobile) {
         throw new Error('Mismatching verification code');
       }
